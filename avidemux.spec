@@ -1,11 +1,11 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.3.0
-%define rel 7
-%define pre 0
+%define version 2.4
+%define rel 1
+%define pre 1
 %if %pre
-%define filename %{name}_%{oversion}_%pre
-%define release %mkrel 0.%pre.%rel
+%define filename %{name}_%{version}_preview%pre
+%define release %mkrel 0.preview%pre.%rel
 %else 
 %define filename %{name}_%version
 %define release %mkrel %rel
@@ -27,7 +27,7 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.bz2
-Patch0:		avidemux-2.3.0-conditional-amr+toolame.patch
+Patch0:		avidemux-2.4-conditional-amr+twolame.patch
 License:	GPL
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -49,16 +49,9 @@ BuildRequires:	libfaac-devel
 BuildRequires:	x264-devel
 BuildRequires:	dtsdec-devel > 0.0.2-4
 %endif
-BuildRequires:	mozilla-firefox-devel
 BuildRequires:	automake1.8
 BuildRequires:	ImageMagick
 Requires: gtk+2.0 >= 2.6.0
-%define firefox_version	%(rpm -q mozilla-firefox --queryformat %{VERSION})
-%if %mdkversion >= 200700
-Requires: %mklibname mozilla-firefox %firefox_version
-%else
-Requires: mozilla-firefox = %firefox_version
-%endif
 
 %description
 Avidemux is a free video editor designed for simple cutting,
@@ -72,29 +65,28 @@ This package is in PLF because this build has support for codecs
 covered by software patents.
 %endif
 
+%package cli
+Summary:	%{pkgsummary} - command-line version
+Group:		Video
+
+%description cli
+Avidemux is a free video editor. This package contains the
+version with a command-line interface.
+
+%if %with plf
+This package is in PLF because this build has support for codecs
+covered by software patents.
+%endif
+
 %prep
 %setup -q -n %filename
 %patch0 -p1
 
 %build
 sh admin/cvs.sh cvs
-
-%if %mdkversion >= 200710
-export FFCONFIG=firefox-config
-%else
-export FFCONFIG=mozilla-firefox-config
-%endif
-
-export CPPFLAGS="`$FFCONFIG --cflags js` -DXP_UNIX"
-export LDFLAGS=`$FFCONFIG --libs`
-#gw add rpath:
-export LDFLAGS="$LDFLAGS `$FFCONFIG --libs|sed s/L/Wl,-rpath\ /`"
-%if %mdkversion <= 200600
-export LDFLAGS="$LDFLAGS -L%{_prefix}/X11R6/%{_lib}"
-%endif
 %configure2_5x --disable-warnings \
 %if %with plf
-	--enable-toolame \
+	--enable-twolame \
 	--enable-amr_nb \
 %endif
 %if ! %build_mmx
@@ -120,7 +112,7 @@ convert avidemux_icon.png -resize 16x16 $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
 install -d -m 755 $RPM_BUILD_ROOT%{_menudir}
 cat >$RPM_BUILD_ROOT%{_menudir}/%{name} <<EOF
 ?package(%{name}): \
-	command="%{_bindir}/%{name}2"\
+	command="%{_bindir}/%{name}2_gtk"\
 	needs="X11"\
 	section="Multimedia/Video"\
 	icon="%{name}.png"\
@@ -133,7 +125,7 @@ cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 Encoding=UTF-8
 Name=%{Name}
 Comment=%{pkgsummary}
-Exec=%{_bindir}/%{name}2 %U
+Exec=%{_bindir}/%{name}2_gtk %U
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -143,6 +135,11 @@ EOF
 rm -rf %buildroot%_datadir/locale/klingon
 
 %{find_lang} %{name}
+
+%if %mdkversion <= 200710
+# compatibility symlink
+ln -s avidemux2_gtk %{buildroot}%{_bindir}/avidemux2
+%endif
 
 %post
 %{update_menus}
@@ -157,10 +154,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc AUTHORS COPYING INSTALL TODO History README
 %{_bindir}/avidemux2
+%{_bindir}/avidemux2_gtk
 %{_menudir}/%{name}
 %_datadir/applications/mandriva-*
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 
-
+%files cli -f %{name}.lang
+%defattr(-,root,root)
+%doc README
+%{_bindir}/avidemux2_cli
