@@ -153,7 +153,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(-,root,root)
 %doc AUTHORS COPYING INSTALL TODO History README
+%if %mdkversion <= 200710
 %{_bindir}/avidemux2
+%endif
 %{_bindir}/avidemux2_gtk
 %{_menudir}/%{name}
 %_datadir/applications/mandriva-*
