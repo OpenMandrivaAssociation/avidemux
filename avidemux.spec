@@ -1,8 +1,8 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4
-%define rel 3
-%define pre 1
+%define rel 1
+%define pre 2
 %if %pre
 %define filename %{name}_%{version}_preview%pre
 %define release %mkrel 0.preview%pre.%rel
@@ -26,8 +26,7 @@ Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
-Source0:	http://download.berlios.de/avidemux/%{filename}.tar.bz2
-Patch0:		avidemux-2.4-conditional-amr+twolame.patch
+Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 License:	GPL
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -39,6 +38,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libmad-devel
 BuildRequires:	liba52dec-devel
 BuildRequires:	libarts-devel 
+BuildRequires:	libvorbis-devel
 BuildRequires:	esound-devel
 BuildRequires:	gettext-devel
 %if %with plf
@@ -47,6 +47,7 @@ BuildRequires:	liblame-devel
 BuildRequires:	libfaad2-devel
 BuildRequires:	libfaac-devel
 BuildRequires:	x264-devel
+BuildRequires:  libamrnb-devel
 BuildRequires:	dtsdec-devel > 0.0.2-4
 %endif
 BuildRequires:	automake1.8
@@ -80,7 +81,6 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
-%patch0 -p1
 
 %build
 sh admin/cvs.sh cvs
