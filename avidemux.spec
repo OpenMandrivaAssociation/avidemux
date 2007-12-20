@@ -30,6 +30,7 @@ Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 License:	GPL
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
+BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	gtk+2-devel >= 2.6.0
 BuildRequires:	SDL-devel
 BuildRequires:	nasm
