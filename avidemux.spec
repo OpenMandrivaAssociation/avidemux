@@ -2,7 +2,7 @@
 %define	Name	Avidemux
 %define version 2.4
 %define rel 1
-%define pre 3
+%define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
 %define release %mkrel 0.preview%pre.%rel
@@ -41,6 +41,8 @@ BuildRequires:	libarts-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	esound-devel
 BuildRequires:	gettext-devel
+# not packaged yet:
+#BuildRequires:  libaften-devel
 %if %with plf
 BuildRequires:	libxvid-devel
 BuildRequires:	liblame-devel
