@@ -111,16 +111,6 @@ convert avidemux_icon.png -resize 32x32 $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
 convert avidemux_icon.png -resize 16x16 $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
 
 # menu
-install -d -m 755 $RPM_BUILD_ROOT%{_menudir}
-cat >$RPM_BUILD_ROOT%{_menudir}/%{name} <<EOF
-?package(%{name}): \
-	command="%{_bindir}/%{name}2_gtk"\
-	needs="X11"\
-	section="Multimedia/Video"\
-	icon="%{name}.png"\
-	title="%{Name}"\
-	longtitle="%{pkgsummary}" xdg="true"
-EOF
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
@@ -158,7 +148,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/avidemux2
 %endif
 %{_bindir}/avidemux2_gtk
-%{_menudir}/%{name}
 %_datadir/applications/mandriva-*
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
