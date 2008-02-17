@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4.1
-%define rel 1
+%define rel 2
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -27,11 +27,13 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
+Patch: avidemux_2.4.1-qt4.patch
 License:	GPL
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	gtk+2-devel >= 2.6.0
+BuildRequires:	qt4-devel
 BuildRequires:	SDL-devel
 BuildRequires:	nasm
 BuildRequires:	libxml2-devel
@@ -54,7 +56,7 @@ BuildRequires:	dtsdec-devel > 0.0.2-4
 %endif
 BuildRequires:	automake1.8
 BuildRequires:	ImageMagick
-Requires: gtk+2.0 >= 2.6.0
+Requires: avidemux-ui
 
 %description
 Avidemux is a free video editor designed for simple cutting,
@@ -68,9 +70,31 @@ This package is in PLF because this build has support for codecs
 covered by software patents.
 %endif
 
+%package gtk
+Summary:	%{pkgsummary} - GTK GUI
+Group:		Video
+Requires: gtk+2.0 >= 2.6.0
+Requires: %name >= %version
+Provides: avidemux-ui
+
+%description gtk
+Avidemux is a free video editor. This package contains the
+version with a graphical user interface based on GTK.
+
+%package qt
+Summary:	%{pkgsummary} - Qt4 GUI
+Group:		Video
+Requires: %name >= %version
+Provides: avidemux-ui
+
+%description qt
+Avidemux is a free video editor. This package contains the
+version with a graphical user interface based on Qt4.
+
 %package cli
 Summary:	%{pkgsummary} - command-line version
 Group:		Video
+Provides: avidemux-ui
 
 %description cli
 Avidemux is a free video editor. This package contains the
@@ -83,6 +107,7 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
+%patch -p1
 
 %build
 sh admin/cvs.sh cvs
@@ -91,6 +116,9 @@ sh admin/cvs.sh cvs
 	--enable-twolame \
 	--enable-amr_nb \
 %endif
+	--with-qt-dir=%_prefix/lib/qt4 \
+        --with-qt-include=%_prefix/lib/qt4/include \
+	--with-qt-lib=%_prefix/lib/qt4/%_lib \
 %if ! %build_mmx
 	--disable-mmx
 %endif
@@ -112,7 +140,7 @@ convert avidemux_icon.png -resize 16x16 $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
 
 # menu
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}-gtk.desktop << EOF
 [Desktop Entry]
 Name=%{Name}
 Comment=%{pkgsummary}
@@ -121,8 +149,20 @@ Icon=%{name}
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=AudioVideo;Video;AudioVideoEditing;X-MandrivaLinux-Multimedia-Video;GTK;
+Categories=AudioVideo;Video;AudioVideoEditing;GTK;
 EOF
+cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}-qt.desktop << EOF
+[Desktop Entry]
+Name=%{Name}
+Comment=%{pkgsummary}
+Exec=%{_bindir}/%{name}2_qt4 %U
+Icon=%{name}
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=AudioVideo;Video;AudioVideoEditing;Qt;
+EOF
+
 rm -rf %buildroot%_datadir/locale/klingon
 
 %{find_lang} %{name}
@@ -132,10 +172,16 @@ rm -rf %buildroot%_datadir/locale/klingon
 ln -s avidemux2_gtk %{buildroot}%{_bindir}/avidemux2
 %endif
 
-%post
+%post gtk
 %{update_menus}
 
-%postun
+%postun gtk
+%{clean_menus}
+
+%post qt
+%{update_menus}
+
+%postun qt
 %{clean_menus}
 
 %clean 
@@ -147,13 +193,22 @@ rm -rf $RPM_BUILD_ROOT
 %if %mdkversion <= 200710
 %{_bindir}/avidemux2
 %endif
-%{_bindir}/avidemux2_gtk
-%_datadir/applications/mandriva-*
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 
-%files cli -f %{name}.lang
+%files gtk
+%defattr(-,root,root)
+%{_bindir}/avidemux2_gtk
+%_datadir/applications/mandriva-avidemux-gtk.desktop
+
+%files qt
+%defattr(-,root,root)
+%{_bindir}/avidemux2_qt4
+%_datadir/applications/mandriva-avidemux-qt.desktop
+
+
+%files cli
 %defattr(-,root,root)
 %doc README
 %{_bindir}/avidemux2_cli
