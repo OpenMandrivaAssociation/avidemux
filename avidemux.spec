@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4.1
-%define rel 2
+%define rel 3
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
