@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4.1
-%define rel 3
+%define rel 4
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -27,8 +27,12 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
-Patch: avidemux_2.4.1-qt4.patch
-License:	GPL
+Patch0:		avidemux_2.4.1-qt4.patch
+Patch1:		avidemux-2.4-i18n.patch
+Patch2:		avidemux-2.4-libdca.patch
+Patch3:		avidemux-2.4.1-gcc43-includes.patch
+Patch4:		avidemux-2.4.1-gcc43-missing-asm-naming.patch
+License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 BuildRoot:	%{_tmppath}/%{name}-buildroot
@@ -107,7 +111,11 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
-%patch -p1
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 sh admin/cvs.sh cvs
@@ -116,9 +124,9 @@ sh admin/cvs.sh cvs
 	--enable-twolame \
 	--enable-amr_nb \
 %endif
-	--with-qt-dir=%_prefix/lib/qt4 \
-        --with-qt-include=%_prefix/lib/qt4/include \
-	--with-qt-lib=%_prefix/lib/qt4/%_lib \
+	--with-qt-dir=%qt4dir \
+        --with-qt-include=%qt4include \
+	--with-qt-lib=%qt4lib \
 %if ! %build_mmx
 	--disable-mmx
 %endif
