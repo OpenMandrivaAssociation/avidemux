@@ -180,17 +180,25 @@ rm -rf %buildroot%_datadir/locale/klingon
 ln -s avidemux2_gtk %{buildroot}%{_bindir}/avidemux2
 %endif
 
+%if %mdkversion < 200900
 %post gtk
 %{update_menus}
+%endif
 
+%if %mdkversion < 200900
 %postun gtk
 %{clean_menus}
+%endif
 
+%if %mdkversion < 200900
 %post qt
 %{update_menus}
+%endif
 
+%if %mdkversion < 200900
 %postun qt
 %{clean_menus}
+%endif
 
 %clean 
 rm -rf $RPM_BUILD_ROOT
