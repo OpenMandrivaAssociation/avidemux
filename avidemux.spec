@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4.2
-%define rel 1
+%define rel 2
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -111,7 +111,7 @@ covered by software patents.
 %setup -q -n %filename
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+%patch2 -p1 -b .libdca
 sh admin/cvs.sh cvs
 libtoolize --copy --force
 
