@@ -49,6 +49,7 @@ BuildRequires:	libpulseaudio-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	gettext-devel
 BuildRequires:	cmake
+BuildRequires:	libxslt-proc
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
