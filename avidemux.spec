@@ -35,7 +35,7 @@ Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	gtk+2-devel >= 2.6.0
-BuildRequires:	qt4-devel
+BuildRequires:	qt4-devel qt4-linguist
 BuildRequires:	SDL-devel
 BuildRequires:	nasm
 BuildRequires:	libxml2-devel
