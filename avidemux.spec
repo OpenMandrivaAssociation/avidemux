@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.4.2
-%define rel 2
+%define version 2.4.3
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -44,7 +44,11 @@ BuildRequires:	liba52dec-devel
 BuildRequires:	libarts-devel 
 BuildRequires:	libvorbis-devel
 BuildRequires:	esound-devel
+BuildRequires:	libjack-devel
+BuildRequires:	libpulseaudio-devel
+BuildRequires:	libsamplerate-devel
 BuildRequires:	gettext-devel
+BuildRequires:	cmake
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
@@ -56,7 +60,6 @@ BuildRequires:	x264-devel
 BuildRequires:  libamrnb-devel
 BuildRequires:	libdca-devel
 %endif
-BuildRequires:	automake1.8
 BuildRequires:	ImageMagick
 Requires: avidemux-ui
 
@@ -112,24 +115,17 @@ covered by software patents.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1 -b .libdca
-sh admin/cvs.sh cvs
-libtoolize --copy --force
 
 %build
-%configure2_5x \
-	--with-qt-dir=%qt4dir \
-        --with-qt-include=%qt4include \
-	--with-qt-lib=%qt4lib \
-%if ! %build_mmx
-	--disable-mmx
-%endif
-
-# parallel build broken as of 2.3-0.preview2
-make
+#gw FIXME: How do I disable MMX with cmake?
+%cmake
+%make
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd build
 %makeinstall_std
+cd ..
 
 # icons
 install -d -m755 $RPM_BUILD_ROOT%{_liconsdir}
@@ -215,6 +211,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_bindir}/avidemux2_qt4
 %_datadir/applications/mandriva-avidemux-qt.desktop
+%dir %_datadir/%name
+%dir %_datadir/%name/i18n
+%_datadir/%name/i18n/*.qm
 
 
 %files cli
