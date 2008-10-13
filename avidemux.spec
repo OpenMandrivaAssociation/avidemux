@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.4.3
-%define rel 2
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -30,8 +30,6 @@ Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch0:		avidemux_2.4.1-qt4.patch
 Patch1:		avidemux-2.4-i18n.patch
 Patch2:		avidemux-2.4-libdca.patch
-#gw from Gentoo, fix x264 encoding
-Patch3:		avidemux-2.4.2-x264-2pass-fix.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -118,7 +116,6 @@ covered by software patents.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1 -b .libdca
-%patch3 -p1
 
 %build
 #gw FIXME: How do I disable MMX with cmake?
