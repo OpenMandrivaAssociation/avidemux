@@ -63,7 +63,7 @@ BuildRequires:	x264-devel
 BuildRequires:  libamrnb-devel
 BuildRequires:	libdca-devel
 %endif
-BuildRequires:	ImageMagick
+BuildRequires:	imagemagick
 Requires: avidemux-ui
 
 %description
