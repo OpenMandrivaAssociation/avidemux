@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.4.3
-%define rel 2
+%define version 2.4.4
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -29,9 +29,8 @@ Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch0:		avidemux_2.4.1-qt4.patch
 Patch1:		avidemux-2.4-i18n.patch
-Patch2:		avidemux-2.4-libdca.patch
-#gw from svn, fix build with new x264 >= 0.65
-Patch3:		avidemux-2.4.3-new-x264.patch
+Patch2:		avidemux-2.4.4-libdca.patch
+Patch4:		avidemux_2.4.4-format-strings.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -43,7 +42,6 @@ BuildRequires:	nasm
 BuildRequires:	libxml2-devel
 BuildRequires:	libmad-devel
 BuildRequires:	liba52dec-devel
-BuildRequires:	libarts-devel 
 BuildRequires:	libvorbis-devel
 BuildRequires:	esound-devel
 BuildRequires:	libjack-devel
@@ -118,7 +116,7 @@ covered by software patents.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1 -b .libdca
-%patch3 -p1
+%patch4 -p1
 
 %build
 #gw FIXME: How do I disable MMX with cmake?
