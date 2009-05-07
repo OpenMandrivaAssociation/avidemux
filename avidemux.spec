@@ -30,6 +30,8 @@ Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch0:		avidemux_2.4.1-qt4.patch
 Patch1:		avidemux-2.4-i18n.patch
 Patch2:		avidemux-2.4.4-libdca.patch
+# http://bugs.gentoo.org/show_bug.cgi?id=268618
+Patch3:		avidemux-2.4.4-cmake.patch
 Patch4:		avidemux_2.4.4-format-strings.patch
 License:	GPLv2+
 Group:		Video
@@ -116,6 +118,7 @@ covered by software patents.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1 -b .libdca
+%patch3 -p1
 %patch4 -p1
 
 %build
