@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.4.4
-%define rel 2
+%define version 2.5.0
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -27,12 +27,10 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
-Patch0:		avidemux_2.4.1-qt4.patch
-Patch1:		avidemux-2.4-i18n.patch
-Patch2:		avidemux-2.4.4-libdca.patch
-# http://bugs.gentoo.org/show_bug.cgi?id=268618
-Patch3:		avidemux-2.4.4-cmake.patch
-Patch4:		avidemux_2.4.4-format-strings.patch
+Patch1:		avidemux-2.5.0-i18n.patch
+Patch4:		avidemux-2.5.0-format-strings.patch
+Patch5:		avidemux_2.5.0-typecast.patch
+Patch6:		avidemux_2.5.0-headers.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -115,16 +113,17 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
-%patch0 -p1
 %patch1 -p1
-%patch2 -p1 -b .libdca
-%patch3 -p1
-%patch4 -p1
+%patch4 -p1 -b .format-strings
+%patch5 -p1
+%patch6 -p1
 
 %build
 #gw FIXME: How do I disable MMX with cmake?
+#gw FIXME2: how do I make it link to -ldl ?
+%define _disable_ld_no_undefined 1
 %cmake
-%make
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -199,18 +198,24 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(-,root,root)
-%doc AUTHORS COPYING INSTALL TODO History README
+%doc AUTHORS
 %if %mdkversion <= 200710
 %{_bindir}/avidemux2
 %endif
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
+%_libdir/libADM5*
+%_libdir/libADM_core*
+%_libdir/libADM_smjs.so
+%_datadir/ADM_scripts/
 
 %files gtk
 %defattr(-,root,root)
 %{_bindir}/avidemux2_gtk
 %_datadir/applications/mandriva-avidemux-gtk.desktop
+%_libdir/libADM_render_gtk.so
+%_libdir/libADM_UIGtk.so
 
 %files qt
 %defattr(-,root,root)
@@ -219,9 +224,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir %_datadir/%name
 %dir %_datadir/%name/i18n
 %_datadir/%name/i18n/*.qm
-
+%_libdir/libADM_render_qt4.so
+%_libdir/libADM_UIQT4.so
 
 %files cli
 %defattr(-,root,root)
 %doc README
 %{_bindir}/avidemux2_cli
+%_libdir/libADM_render_cli.so
+%_libdir/libADM_UICli.so
