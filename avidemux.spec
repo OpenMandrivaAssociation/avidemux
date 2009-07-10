@@ -144,8 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 cd build
 %makeinstall_std
 mkdir -p %buildroot%_libdir
+cd ..
 %if %build_plugins
-cd ../plugins/build
+cd plugins/build
 %makeinstall_std
 cd ../..
 %endif
