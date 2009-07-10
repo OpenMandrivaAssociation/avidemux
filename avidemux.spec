@@ -129,6 +129,10 @@ make
 rm -rf $RPM_BUILD_ROOT
 cd build
 %makeinstall_std
+mkdir -p %buildroot%_libdir
+%if %_lib != lib
+mv %buildroot%_prefix/lib/* %buildroot%_libdir
+%endif
 cd ..
 
 # icons
