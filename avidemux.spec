@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.5.0
-%define rel 2
+%define rel 3
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -13,19 +13,13 @@
 
 %bcond_with plf
 
-%define build_plugins 0
+%define build_plugins 1
 
 %if %with plf
-#gw currently it does not build without lame, don't know how to fix the cmake logic
-%define build_plugins 1
 %define distsuffix plf
 %endif
 
 %define	pkgsummary	A free video editor
-%define build_mmx 1
-%{?_with_mmx: %{expand: %%define build_mmx 1}}
-%{?_without_mmx: %{expand: %%define build_mmx 0}}
-
 
 Name:		%{name}
 Version:	%{version}
@@ -36,6 +30,8 @@ Patch1:		avidemux-2.5.0-i18n.patch
 Patch4:		avidemux-2.5.0-format-strings.patch
 Patch5:		avidemux_2.5.0-typecast.patch
 Patch6:		avidemux_2.5.0-headers.patch
+Patch7:		avidemux_2.5.0-wrong-include.patch
+Patch8:		avidemux_2.5.0-underlinking.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -53,6 +49,7 @@ BuildRequires:	libjack-devel
 BuildRequires:	libpulseaudio-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	gettext-devel
+BuildRequires:	libxv-devel
 BuildRequires:	cmake
 BuildRequires:	libxslt-proc
 # not packaged yet:
@@ -67,10 +64,6 @@ BuildRequires:  libamrnb-devel
 BuildRequires:	libdca-devel
 %endif
 BuildRequires:	imagemagick
-%if %build_plugins
-#gw yes, the plugins link against the avidemux libs
-BuildRequires:	avidemux-gtk avidemux-qt
-%endif
 Requires: avidemux-ui
 
 %description
@@ -89,7 +82,7 @@ covered by software patents.
 Summary:	%{pkgsummary} - GTK GUI
 Group:		Video
 Requires: gtk+2.0 >= 2.6.0
-Requires: %name >= %version
+Requires: %name = %version
 Provides: avidemux-ui
 
 %description gtk
@@ -99,7 +92,7 @@ version with a graphical user interface based on GTK.
 %package qt
 Summary:	%{pkgsummary} - Qt4 GUI
 Group:		Video
-Requires: %name >= %version
+Requires: %name = %version
 Provides: avidemux-ui
 
 %description qt
@@ -109,6 +102,7 @@ version with a graphical user interface based on Qt4.
 %package cli
 Summary:	%{pkgsummary} - command-line version
 Group:		Video
+Requires: %name = %version
 Provides: avidemux-ui
 
 %description cli
@@ -126,16 +120,20 @@ covered by software patents.
 %patch4 -p1 -b .format-strings
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 %build
-#gw FIXME: How do I disable MMX with cmake?
-#gw FIXME2: how do I make it link to -ldl ?
-%define _disable_ld_no_undefined 1
 %cmake
 make
 %if %build_plugins
-cd ../plugins
-%cmake -DAVIDEMUX_SOURCE_DIR=$RPM_BUILD_DIR/%filename -DAVIDEMUX_CORECONFIG_DIR=$RPM_BUILD_DIR/%filename/build/config -DAVIDEMUX_INSTALL_PREFIX=%_prefix
+# plugin build expects libraries to be already installed; we fake a prefix
+# in build/ by symlinking all libraries to build/lib/
+mkdir -p lib
+cd lib
+find ../avidemux -name '*.so*' | xargs ln -sft . 
+cd ../../plugins
+%cmake -DAVIDEMUX_SOURCE_DIR=$RPM_BUILD_DIR/%filename -DAVIDEMUX_CORECONFIG_DIR=$RPM_BUILD_DIR/%filename/build/config -DAVIDEMUX_INSTALL_PREFIX=%_builddir/%filename/build
 make
 %endif
 
@@ -236,9 +234,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %_libdir/ADM_plugins/audioDecoder
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_Mad.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_a52.so
+%if %with plf
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_amrnb.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_dca.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_faad.so
+%endif
 %dir %_libdir/ADM_plugins/audioDevices
 %_libdir/ADM_plugins/audioDevices/libADM_av_alsa.so
 #%_libdir/ADM_plugins/audioDevices/libADM_av_arts.so
@@ -248,13 +248,14 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioDevices/libADM_av_pulseAudioSimple.so
 %_libdir/ADM_plugins/audioDevices/libADM_av_sdl.so
 %dir %_libdir/ADM_plugins/audioEncoders
-%_libdir/ADM_plugins/audioEncoders/libADM_ae_faac.so
-%_libdir/ADM_plugins/audioEncoders/libADM_ae_lame.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_lav_ac3.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_lav_mp2.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_pcm.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_twolame.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_vorbis.so
+%if %with plf
+%_libdir/ADM_plugins/audioEncoders/libADM_ae_faac.so
+%_libdir/ADM_plugins/audioEncoders/libADM_ae_lame.so
 %dir %_libdir/ADM_plugins/videoEncoder
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_x264.so
 %dir %_libdir/ADM_plugins/videoEncoder/x264/
@@ -263,6 +264,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_xvid.so
 %dir %_libdir/ADM_plugins/videoEncoder/xvid
 %_libdir/ADM_plugins/videoEncoder/xvid/*.xsd
+%endif
 %dir %_libdir/ADM_plugins/videoFilter
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Deinterlace.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Delta.so
@@ -328,8 +330,10 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM_render_gtk.so
 %_libdir/libADM_UIGtk.so
 %if %build_plugins
+%if %with plf
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Gtk.so
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Gtk.so
+%endif
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Crop_gtk.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_asharp_gtk.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_avisynthResize_gtk.so
@@ -355,8 +359,10 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM_render_qt4.so
 %_libdir/libADM_UIQT4.so
 %if %build_plugins
+%if %with plf
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Qt.so
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Qt.so
+%endif
 %_libdir/ADM_plugins/videoFilter/libADM_vf_crop_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_asharp_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_avisynthResize_qt4.so
