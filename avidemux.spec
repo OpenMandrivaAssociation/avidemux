@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.5.0
-%define rel 3
+%define rel 4
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -122,6 +122,11 @@ covered by software patents.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+
+# libdir is nicely hardcoded
+sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
+grep -q '"%{_lib}"' avidemux/main.cpp
+grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 
 %build
 %cmake
