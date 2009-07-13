@@ -13,8 +13,6 @@
 
 %bcond_with plf
 
-%define build_plugins 1
-
 %if %with plf
 %define distsuffix plf
 %endif
@@ -131,7 +129,7 @@ grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 %build
 %cmake
 make
-%if %build_plugins
+
 # plugin build expects libraries to be already installed; we fake a prefix
 # in build/ by symlinking all libraries to build/lib/
 mkdir -p lib
@@ -140,7 +138,7 @@ find ../avidemux -name '*.so*' | xargs ln -sft .
 cd ../../plugins
 %cmake -DAVIDEMUX_SOURCE_DIR=$RPM_BUILD_DIR/%filename -DAVIDEMUX_CORECONFIG_DIR=$RPM_BUILD_DIR/%filename/build/config -DAVIDEMUX_INSTALL_PREFIX=%_builddir/%filename/build
 make
-%endif
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -148,11 +146,11 @@ cd build
 %makeinstall_std
 mkdir -p %buildroot%_libdir
 cd ..
-%if %build_plugins
+
 cd plugins/build
 %makeinstall_std
 cd ../..
-%endif
+
 %if %_lib != lib
 mv %buildroot%_prefix/lib/* %buildroot%_libdir
 %endif
@@ -234,7 +232,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM5*
 %_libdir/libADM_core*
 %_libdir/libADM_smjs.so
-%if %build_plugins
 %dir %_libdir/ADM_plugins
 %dir %_libdir/ADM_plugins/audioDecoder
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_Mad.so
@@ -325,7 +322,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_yadif.so
 %_libdir/ADM_plugins/videoFilter/libADM_vidChromaU.so
 %_libdir/ADM_plugins/videoFilter/libADM_vidChromaV.so
-%endif
 %_datadir/ADM_scripts/
 
 %files gtk
@@ -334,7 +330,6 @@ rm -rf $RPM_BUILD_ROOT
 %_datadir/applications/mandriva-avidemux-gtk.desktop
 %_libdir/libADM_render_gtk.so
 %_libdir/libADM_UIGtk.so
-%if %build_plugins
 %if %with plf
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Gtk.so
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Gtk.so
@@ -352,7 +347,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mpdelogo_gtk.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mplayerResize_gtk.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_sub_gtk.so
-%endif
 
 %files qt
 %defattr(-,root,root)
@@ -363,7 +357,6 @@ rm -rf $RPM_BUILD_ROOT
 %_datadir/%name/i18n/*.qm
 %_libdir/libADM_render_qt4.so
 %_libdir/libADM_UIQT4.so
-%if %build_plugins
 %if %with plf
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Qt.so
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Qt.so
@@ -381,7 +374,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mpdelogo_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mplayerResize_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_sub_qt4.so
-%endif
 
 %files cli
 %defattr(-,root,root)
