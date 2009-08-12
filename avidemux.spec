@@ -80,8 +80,8 @@ covered by software patents.
 Summary:	%{pkgsummary} - GTK GUI
 Group:		Video
 Requires: gtk+2.0 >= 2.6.0
-Requires: %name = %version
-Provides: avidemux-ui
+Requires: %name = %version-%release
+Provides: avidemux-ui = %version-%release
 
 %description gtk
 Avidemux is a free video editor. This package contains the
@@ -90,8 +90,8 @@ version with a graphical user interface based on GTK.
 %package qt
 Summary:	%{pkgsummary} - Qt4 GUI
 Group:		Video
-Requires: %name = %version
-Provides: avidemux-ui
+Requires: %name = %version-%release
+Provides: avidemux-ui = %version-%release
 
 %description qt
 Avidemux is a free video editor. This package contains the
@@ -100,8 +100,8 @@ version with a graphical user interface based on Qt4.
 %package cli
 Summary:	%{pkgsummary} - command-line version
 Group:		Video
-Requires: %name = %version
-Provides: avidemux-ui
+Requires: %name = %version-%release
+Provides: avidemux-ui = %version-%release
 
 %description cli
 Avidemux is a free video editor. This package contains the
