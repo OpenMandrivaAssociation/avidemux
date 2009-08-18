@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.5.0
-%define rel 4
+%define version 2.5.1
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -25,11 +25,6 @@ Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch1:		avidemux-2.5.0-i18n.patch
-Patch4:		avidemux-2.5.0-format-strings.patch
-Patch5:		avidemux_2.5.0-typecast.patch
-Patch6:		avidemux_2.5.0-headers.patch
-Patch7:		avidemux_2.5.0-wrong-include.patch
-Patch8:		avidemux_2.5.0-underlinking.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -115,11 +110,6 @@ covered by software patents.
 %prep
 %setup -q -n %filename
 %patch1 -p1
-%patch4 -p1 -b .format-strings
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
@@ -267,6 +257,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %_libdir/ADM_plugins/videoEncoder/xvid
 %_libdir/ADM_plugins/videoEncoder/xvid/*.xsd
 %endif
+%dir %_libdir/ADM_plugins/videoEncoder/avcodec
+%_libdir/ADM_plugins/videoEncoder/avcodec/Mpeg1Param.xsd
+%_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_avcodec.so
 %dir %_libdir/ADM_plugins/videoFilter
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Deinterlace.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Delta.so
