@@ -25,6 +25,7 @@ Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch1:		avidemux-2.5.0-i18n.patch
+Patch2:		avidemux-2.5.1-opencore-check.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -109,6 +110,7 @@ covered by software patents.
 %prep
 %setup -q -n %filename
 %patch1 -p1
+%patch2 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
@@ -226,7 +228,8 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_Mad.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_a52.so
 %if %with plf
-%_libdir/ADM_plugins/audioDecoder/libADM_ad_amrnb.so
+%_libdir/ADM_plugins/audioDecoder/libADM_ad_opencore_amrnb.so
+%_libdir/ADM_plugins/audioDecoder/libADM_ad_opencore_amrwb.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_faad.so
 %endif
 %dir %_libdir/ADM_plugins/audioDevices
