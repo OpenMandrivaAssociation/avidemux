@@ -53,8 +53,7 @@ BuildRequires:	liblame-devel
 BuildRequires:	libfaad2-devel
 BuildRequires:	libfaac-devel
 BuildRequires:	x264-devel
-BuildRequires:  libamrnb-devel
-BuildRequires:	libdca-devel
+BuildRequires:  opencore-amr-devel
 %endif
 BuildRequires:	imagemagick
 Requires: avidemux-ui
@@ -228,7 +227,6 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_a52.so
 %if %with plf
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_amrnb.so
-%_libdir/ADM_plugins/audioDecoder/libADM_ad_dca.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_faad.so
 %endif
 %dir %_libdir/ADM_plugins/audioDevices
