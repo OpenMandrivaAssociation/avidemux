@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.5.1
-%define rel 4
+%define version 2.5.2
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -26,7 +26,6 @@ Summary:	%{pkgsummary}
 Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
 Patch1:		avidemux-2.5.0-i18n.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
-Patch3:		avidemux_2.5.1-new-x264.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -112,7 +111,6 @@ covered by software patents.
 %setup -q -n %filename
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
