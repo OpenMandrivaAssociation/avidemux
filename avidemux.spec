@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.5.2
-%define rel 1
+%define rel 2
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -247,10 +247,12 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_faac.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_lame.so
 %dir %_libdir/ADM_plugins/videoEncoder
+%if %mdvver >= 201010
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_x264.so
 %dir %_libdir/ADM_plugins/videoEncoder/x264/
 %_libdir/ADM_plugins/videoEncoder/x264/*.xml
 %_libdir/ADM_plugins/videoEncoder/x264/*.xsd
+%endif
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_xvid.so
 %dir %_libdir/ADM_plugins/videoEncoder/xvid
 %_libdir/ADM_plugins/videoEncoder/xvid/*.xsd
