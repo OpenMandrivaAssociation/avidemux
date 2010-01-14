@@ -142,10 +142,6 @@ cd plugins/build
 %makeinstall_std
 cd ../..
 
-%if %_lib != lib
-mv %buildroot%_prefix/lib/* %buildroot%_libdir
-%endif
-
 # icons
 install -d -m755 $RPM_BUILD_ROOT%{_liconsdir}
 install -d -m755 $RPM_BUILD_ROOT%{_iconsdir}
