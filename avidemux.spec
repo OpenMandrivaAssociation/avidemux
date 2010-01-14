@@ -53,7 +53,9 @@ BuildRequires:	libxvid-devel
 BuildRequires:	liblame-devel
 BuildRequires:	libfaad2-devel
 BuildRequires:	libfaac-devel
-BuildRequires:	x264-devel
+%if %mdvver >= 201010
+BuildRequires:	x264-devel >= 0.67
+%endif
 BuildRequires:  opencore-amr-devel
 %endif
 BuildRequires:	imagemagick
