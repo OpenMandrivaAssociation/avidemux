@@ -12,9 +12,13 @@
 %endif
 
 %bcond_with plf
+%define with_x264 0
 
 %if %with plf
 %define distsuffix plf
+%if %mdvver >= 201010
+%define with_x264 1
+%endif
 %endif
 
 %define	pkgsummary	A free video editor
@@ -53,7 +57,7 @@ BuildRequires:	libxvid-devel
 BuildRequires:	liblame-devel
 BuildRequires:	libfaad2-devel
 BuildRequires:	libfaac-devel
-%if %mdvver >= 201010
+%if %with_x264
 BuildRequires:	x264-devel >= 0.67
 %endif
 BuildRequires:  opencore-amr-devel
@@ -249,7 +253,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_faac.so
 %_libdir/ADM_plugins/audioEncoders/libADM_ae_lame.so
 %dir %_libdir/ADM_plugins/videoEncoder
-%if %mdvver >= 201010
+%if %with_x264
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_x264.so
 %dir %_libdir/ADM_plugins/videoEncoder/x264/
 %_libdir/ADM_plugins/videoEncoder/x264/*.xml
@@ -326,7 +330,9 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM_render_gtk.so
 %_libdir/libADM_UIGtk.so
 %if %with plf
+%if %with_x264
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Gtk.so
+%endif
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Gtk.so
 %endif
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Crop_gtk.so
@@ -353,7 +359,9 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM_render_qt4.so
 %_libdir/libADM_UIQT4.so
 %if %with plf
+%if %with_x264
 %_libdir/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Qt.so
+%endif
 %_libdir/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Qt.so
 %endif
 %_libdir/ADM_plugins/videoFilter/libADM_vf_crop_qt4.so
