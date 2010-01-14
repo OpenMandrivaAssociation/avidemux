@@ -23,7 +23,7 @@ Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
-Source0:	http://download.berlios.de/avidemux/%{filename}.tar.gz
+Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
 Patch1:		avidemux-2.5.0-i18n.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 License:	GPLv2+
@@ -232,6 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_opencore_amrwb.so
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_faad.so
 %endif
+%_libdir/ADM_plugins/audioDecoder/libADM_ad_vorbis.so
 %dir %_libdir/ADM_plugins/audioDevices
 %_libdir/ADM_plugins/audioDevices/libADM_av_alsa.so
 #%_libdir/ADM_plugins/audioDevices/libADM_av_arts.so
@@ -362,6 +363,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_cnr2_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_colorYUV_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_contrast_qt4.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_curveEditor_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_eq2_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_equalizer_qt4.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_hue_qt4.so
@@ -375,3 +377,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/avidemux2_cli
 %_libdir/libADM_render_cli.so
 %_libdir/libADM_UICli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_Hue_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_asharp_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_avisynthResize_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_chromashift_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_cnr2_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_colorYUV_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_contrast_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_crop_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_eq2_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_equalizer_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_mpdelogo_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_mplayerResize_cli.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_sub_cli.so
