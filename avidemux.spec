@@ -123,8 +123,8 @@ make
 
 # plugin build expects libraries to be already installed; we fake a prefix
 # in build/ by symlinking all libraries to build/lib/
-mkdir -p lib
-cd lib
+mkdir -p %_lib
+cd %_lib
 find ../avidemux -name '*.so*' | xargs ln -sft . 
 cd ../../plugins
 %cmake -DAVIDEMUX_SOURCE_DIR=$RPM_BUILD_DIR/%filename -DAVIDEMUX_CORECONFIG_DIR=$RPM_BUILD_DIR/%filename/build/config -DAVIDEMUX_INSTALL_PREFIX=%_builddir/%filename/build
