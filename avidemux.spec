@@ -16,9 +16,7 @@
 
 %if %with plf
 %define distsuffix plf
-%if %mdvver >= 201010
 %define with_x264 1
-%endif
 %endif
 
 %define	pkgsummary	A free video editor
