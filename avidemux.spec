@@ -26,7 +26,6 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
-Patch1:		avidemux-2.5.0-i18n.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 License:	GPLv2+
 Group:		Video
@@ -113,7 +112,6 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
-%patch1 -p1
 %patch2 -p1
 
 # libdir is nicely hardcoded
@@ -123,7 +121,7 @@ grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 
 %build
 %cmake
-make
+%make
 
 # plugin build expects libraries to be already installed; we fake a prefix
 # in build/ by symlinking all libraries to build/lib/
