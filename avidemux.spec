@@ -60,6 +60,7 @@ BuildRequires:	x264-devel >= 0.67
 BuildRequires:  opencore-amr-devel
 %endif
 BuildRequires:	imagemagick
+BuildRequires:	yasm
 Requires: avidemux-ui
 
 %description
