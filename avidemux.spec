@@ -27,6 +27,12 @@ Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
 Patch2:		avidemux-2.5.1-opencore-check.patch
+Patch3:		avidemux-jack-underlinking.patch
+# fixes build, from upstrema:
+Patch4:		2.5.3_field_asm_fix.diff
+Patch5:		avidemux-mpeg2enc-underlinking.patch
+# fixes build, from upstream:
+Patch6:		2.5.3_mjpeg_fix.diff
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -114,6 +120,10 @@ covered by software patents.
 %prep
 %setup -q -n %filename
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
