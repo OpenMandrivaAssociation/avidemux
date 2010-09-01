@@ -271,8 +271,15 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoEncoder/xvid/*.xsd
 %endif
 %dir %_libdir/ADM_plugins/videoEncoder/avcodec
-%_libdir/ADM_plugins/videoEncoder/avcodec/Mpeg1Param.xsd
+%_libdir/ADM_plugins/videoEncoder/avcodec/*.xsd
+%dir %_libdir/ADM_plugins/videoEncoder/avcodec/mpeg-?
+%_libdir/ADM_plugins/videoEncoder/avcodec/mpeg-?/*.xml
 %_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_avcodec.so
+%_libdir/ADM_plugins/videoEncoder/libADM_vidEnc_mpeg2enc.so
+%dir %_libdir/ADM_plugins/videoEncoder/mpeg2enc
+%_libdir/ADM_plugins/videoEncoder/mpeg2enc/*.xsd
+%dir %_libdir/ADM_plugins/videoEncoder/mpeg2enc/mpeg-?
+%_libdir/ADM_plugins/videoEncoder/mpeg2enc/mpeg-?/*.xml
 %dir %_libdir/ADM_plugins/videoFilter
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Deinterlace.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Delta.so
