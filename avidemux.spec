@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
 %define version 2.5.3
-%define rel 1
+%define rel 2
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -153,6 +153,10 @@ cd ..
 
 cd plugins/build
 %makeinstall_std
+#gw install this manually:
+cp ADM_videoEncoder/ADM_vidEnc_mpeg2enc/mpeg2enc/libmpeg2enc.so \
+  ADM_videoEncoder/common/pluginOptions/libADM_vidEnc_pluginOptions.so \
+  ADM_videoEncoder/common/xvidRateCtl/libADM_xvidRateCtl.so %buildroot%_libdir
 cd ../..
 
 # icons
@@ -232,6 +236,9 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/libADM5*
 %_libdir/libADM_core*
 %_libdir/libADM_smjs.so
+%_libdir/libADM_vidEnc_pluginOptions.so
+%_libdir/libADM_xvidRateCtl.so
+%_libdir/libmpeg2enc.so
 %dir %_libdir/ADM_plugins
 %dir %_libdir/ADM_plugins/audioDecoder
 %_libdir/ADM_plugins/audioDecoder/libADM_ad_Mad.so
