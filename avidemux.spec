@@ -33,6 +33,8 @@ Patch1:		2.5.4_gtk_menu_dont_crash.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch5:		avidemux-mpeg2enc-underlinking.patch
+#gw fix build with x264 0.110
+Patch6:		avidemux_2.5.4-new-x264.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -125,6 +127,7 @@ covered by software patents.
 %patch2 -p1
 %patch3 -p1
 %patch5 -p1
+%patch6 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
