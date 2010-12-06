@@ -1,7 +1,7 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.5.3
-%define rel 2
+%define version 2.5.4
+%define rel 1
 %define pre 0
 %if %pre
 %define filename %{name}_%{version}_preview%pre
@@ -26,13 +26,13 @@ Version:	%{version}
 Release:	%{release}
 Summary:	%{pkgsummary}
 Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
+#gw official patches: 
+Patch0:	     	2.5.4_audioDevice.patch
+Patch1:		2.5.4_gtk_menu_dont_crash.patch
+#
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
-# fixes build, from upstrema:
-Patch4:		2.5.3_field_asm_fix.diff
 Patch5:		avidemux-mpeg2enc-underlinking.patch
-# fixes build, from upstream:
-Patch6:		2.5.3_mjpeg_fix.diff
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -51,6 +51,7 @@ BuildRequires:	libpulseaudio-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	gettext-devel
 BuildRequires:	libxv-devel
+BuildRequires:	libva-devel
 BuildRequires:	cmake
 BuildRequires:	libxslt-proc
 # not packaged yet:
@@ -119,11 +120,11 @@ covered by software patents.
 
 %prep
 %setup -q -n %filename
+%patch0
+%patch1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
@@ -131,6 +132,9 @@ grep -q '"%{_lib}"' avidemux/main.cpp
 grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 
 %build
+#gw 2.5.4 has linking problems in plugins/ADM_videoFilters/AvsFilter
+#   	      	      	   and in plugins/ADM_videoFilters/Logo/
+%define _disable_ld_no_undefined 1
 %cmake
 %make
 
@@ -298,6 +302,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Tisophote.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_Whirl.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_addborders.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_avsfilter.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_blackenBorders.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_blendDgBob.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_blendRemoval.so
@@ -317,6 +322,7 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vf_kernelDeint.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_largemedian.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_lavDeinterlace.so
+%_libdir/ADM_plugins/videoFilter/libADM_vf_logo.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_lumaonly.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mSharpen.so
 %_libdir/ADM_plugins/videoFilter/libADM_vf_mSmooth.so
@@ -343,6 +349,8 @@ rm -rf $RPM_BUILD_ROOT
 %_libdir/ADM_plugins/videoFilter/libADM_vidChromaU.so
 %_libdir/ADM_plugins/videoFilter/libADM_vidChromaV.so
 %_datadir/ADM_scripts/
+%dir %_datadir/ADM_addons/
+%_datadir/ADM_addons/avsfilter
 
 %files gtk
 %defattr(-,root,root)
