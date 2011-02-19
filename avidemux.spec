@@ -16,6 +16,10 @@
 
 %if %with plf
 %define distsuffix plf
+%if %mdvver >= 201100
+# make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
+%define extrarelsuffix plf
+%endif
 %define with_x264 1
 %endif
 
@@ -23,7 +27,7 @@
 
 Name:		%{name}
 Version:	%{version}
-Release:	%{release}
+Release:	%{release}%{?extrarelsuffix}
 Summary:	%{pkgsummary}
 Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
 #gw official patches: 
