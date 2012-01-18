@@ -48,10 +48,10 @@ BuildRequires:	nasm
 BuildRequires:	libxml2-devel
 BuildRequires:	libmad-devel
 BuildRequires:	liba52dec-devel
-BuildRequires:	libvorbis-devel
+BuildRequires:	oggvorbis-devel
 BuildRequires:	esound-devel
-BuildRequires:	libjack-devel
-BuildRequires:	libpulseaudio-devel
+BuildRequires:	jackit-devel
+BuildRequires:	pulseaudio-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	gettext-devel
 BuildRequires:	libxv-devel
