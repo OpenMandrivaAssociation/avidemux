@@ -142,7 +142,7 @@ grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 #   	      	      	   and in plugins/ADM_videoFilters/Logo/
 %define _disable_ld_no_undefined 1
 %cmake
-%make
+make
 
 # plugin build expects libraries to be already installed; we fake a prefix
 # in build/ by symlinking all libraries to build/lib/
