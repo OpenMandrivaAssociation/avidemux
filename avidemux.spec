@@ -30,11 +30,13 @@ Version:	%{version}
 Release:	%{release}%{?extrarelsuffix}
 Summary:	%{pkgsummary}
 Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
+Source1:	ffmpeg-0.9.1.tar.bz2
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch5:		avidemux-mpeg2enc-underlinking.patch
 #disable arts
 Patch7:		avidemux-2.5.5-arts.patch
+Patch8:		avidemux_2.5.6-ffmpeg.patch
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -66,11 +68,11 @@ BuildRequires:	libfaac-devel
 %if %with_x264
 BuildRequires:	x264-devel >= 0.67
 %endif
-BuildRequires:  opencore-amr-devel
+BuildRequires:	opencore-amr-devel
 %endif
 BuildRequires:	imagemagick
 BuildRequires:	yasm
-Requires: avidemux-ui
+Requires:	avidemux-ui
 
 %description
 Avidemux is a free video editor designed for simple cutting,
@@ -126,6 +128,8 @@ covered by software patents.
 %patch3 -p1
 %patch5 -p1
 %patch7 -p1
+%patch8 -p1
+%__cp %{SOURCE1} avidemux/ADM_libraries/
 
 
 # libdir is nicely hardcoded
@@ -241,10 +245,10 @@ rm -rf %{buildroot}
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_pcm.so
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_twolame.so
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_vorbis.so
+%dir %{_libdir}/ADM_plugins/videoEncoder
 %if %with plf
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_faac.so
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_lame.so
-%dir %{_libdir}/ADM_plugins/videoEncoder
 %if %with_x264
 %{_libdir}/ADM_plugins/videoEncoder/libADM_vidEnc_x264.so
 %dir %{_libdir}/ADM_plugins/videoEncoder/x264/
