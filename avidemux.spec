@@ -1,6 +1,6 @@
 %define	name	avidemux
 %define	Name	Avidemux
-%define version 2.5.5
+%define version 2.5.6
 %define rel 1
 %define pre 0
 %if %pre
@@ -33,8 +33,6 @@ Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filenam
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch5:		avidemux-mpeg2enc-underlinking.patch
-#fix build with x264 0.115
-Patch6:		avidemux-2.5.5-x264.patch
 #disable arts
 Patch7:		avidemux-2.5.5-arts.patch
 License:	GPLv2+
@@ -127,7 +125,6 @@ covered by software patents.
 %patch2 -p1
 %patch3 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 
 
@@ -145,8 +142,8 @@ grep -q '"%{_lib}"' avidemux/ADM_core/src/ADM_fileio.cpp
 
 # plugin build expects libraries to be already installed; we fake a prefix
 # in build/ by symlinking all libraries to build/lib/
-mkdir -p %_lib
-cd %_lib
+mkdir -p %{_lib}
+cd %{_lib}
 find ../avidemux -name '*.so*' | xargs ln -sft . 
 cd ../../plugins
 %cmake -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{filename} -DAVIDEMUX_CORECONFIG_DIR=%{_builddir}/%{filename}/build/config -DAVIDEMUX_INSTALL_PREFIX=%{_builddir}/%{filename}/build
@@ -203,32 +200,7 @@ EOF
 
 rm -rf %{buildroot}%{_datadir}/locale/klingon
 
-%{find_lang} %{name}
-
-%if %mdkversion <= 200710
-# compatibility symlink
-ln -s avidemux2_gtk %{buildroot}%{_bindir}/avidemux2
-%endif
-
-%if %mdkversion < 200900
-%post gtk
-%{update_menus}
-%endif
-
-%if %mdkversion < 200900
-%postun gtk
-%{clean_menus}
-%endif
-
-%if %mdkversion < 200900
-%post qt
-%{update_menus}
-%endif
-
-%if %mdkversion < 200900
-%postun qt
-%{clean_menus}
-%endif
+%find_lang %{name}
 
 %clean 
 rm -rf %{buildroot}
@@ -236,9 +208,6 @@ rm -rf %{buildroot}
 %files -f %{name}.lang
 %defattr(-,root,root)
 %doc AUTHORS
-%if %mdkversion <= 200710
-%{_bindir}/avidemux2
-%endif
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
