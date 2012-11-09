@@ -1,0 +1,35 @@
+diff -urN avidemux_2.5.6/cmake/admFFmpegBuild.cmake avidemux_2.5.6-patched-pre/cmake/admFFmpegBuild.cmake
+--- avidemux_2.5.6/cmake/admFFmpegBuild.cmake	2011-12-29 01:51:49.000000000 +1100
++++ avidemux_2.5.6-patched-pre/cmake/admFFmpegBuild.cmake	2012-01-19 02:46:40.455735611 +1100
+@@ -1,6 +1,6 @@
+ include(admFFmpegUtil)
+ 
+-set(FFMPEG_VERSION 0.9)
++set(FFMPEG_VERSION 0.9.1)
+ set(FFMPEG_SOURCE_ARCHIVE "ffmpeg-${FFMPEG_VERSION}.tar.bz2")
+ set(FFMPEG_SOURCE_ARCHIVE_DIR "ffmpeg-${FFMPEG_VERSION}")
+ 
+diff -urN avidemux_2.5.6/cmake/patches/libavcodec_libavcodec.v.patch avidemux_2.5.6-patched-pre/cmake/patches/libavcodec_libavcodec.v.patch
+--- avidemux_2.5.6/cmake/patches/libavcodec_libavcodec.v.patch	2011-12-15 22:09:11.000000000 +1100
++++ avidemux_2.5.6-patched-pre/cmake/patches/libavcodec_libavcodec.v.patch	2012-01-19 02:54:31.000000000 +1100
+@@ -1,11 +1,13 @@
+---- ../ffmpeg-0.9/libavcodec/libavcodec.v	2011-12-14 15:00:29 +0000
+-+++ libavcodec/libavcodec.v	2011-12-14 15:00:28 +0000
+-@@ -25,5 +25,8 @@
++diff -urN libavcodec/libavcodec.v libavcodec-patched/libavcodec.v
++--- libavcodec/libavcodec.v	2012-01-05 13:03:15.000000000 +1100
+++++ libavcodec-patched/libavcodec.v	2012-01-19 02:54:06.779730884 +1100
++@@ -25,6 +25,9 @@
+                  ff_mmxext_idct;
+                  ff_idct_xvid*;
+                  ff_jpeg_fdct*;
+-+                ff_h264_info;
+-+				ff_golomb_vlc_len;
+-+				ff_ue_golomb_vlc_code;
+++		ff_h264_info;
+++		ff_golomb_vlc_len;
+++		ff_ue_golomb_vlc_code;
++                 #XBMC's configure checks for ff_vdpau_vc1_decode_picture()
++                 ff_vdpau_vc1_decode_picture;
+          local:  *;
+- };
