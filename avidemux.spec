@@ -1,77 +1,63 @@
-%define	name	avidemux
-%define	Name	Avidemux
-%define version 2.5.6
-%define rel 1
-%define pre 0
-%if %pre
-%define filename %{name}_%{version}_preview%{pre}
-%define release %mkrel 0.preview%{pre}.%{rel}
-%else 
 %define filename %{name}_%{version}
-%define release %mkrel %{rel}
-%endif
 
+#############################
+# Hardcore PLF build
+# bcond_with or bcond_without
 %bcond_with plf
-%define with_x264 0
+#############################
 
 %if %with plf
 %define distsuffix plf
-%if %mdvver >= 201100
 # make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
 %define extrarelsuffix plf
 %endif
-%define with_x264 1
-%endif
 
-%define	pkgsummary	A free video editor
-
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}%{?extrarelsuffix}
-Summary:	%{pkgsummary}
-Source0:	http://downloads.sourceforge.net/project/%name/%name/%version/%{filename}.tar.gz
-Source1:	ffmpeg-0.9.1.tar.bz2
-Patch2:		avidemux-2.5.1-opencore-check.patch
-Patch3:		avidemux-jack-underlinking.patch
-Patch5:		avidemux-mpeg2enc-underlinking.patch
-#disable arts
-Patch7:		avidemux-2.5.5-arts.patch
-Patch8:		avidemux_2.5.6-ffmpeg.patch
+Name:		avidemux
+Version:	2.5.6
+Release:	3%{?extrarelsuffix}
+Summary:	A free video editor
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
-BuildRoot:	%{_tmppath}/%{name}-buildroot
-BuildRequires:	gtk+2-devel >= 2.6.0
-BuildRequires:	qt4-devel qt4-linguist
-BuildRequires:	SDL-devel
-BuildRequires:	nasm
-BuildRequires:	libxml2-devel
-BuildRequires:	libmad-devel
-BuildRequires:	liba52dec-devel
-BuildRequires:	oggvorbis-devel
-BuildRequires:	esound-devel
-BuildRequires:	jackit-devel
-BuildRequires:	pulseaudio-devel
-BuildRequires:	libsamplerate-devel
-BuildRequires:	gettext-devel
-BuildRequires:	libxv-devel
-BuildRequires:	libva-devel
+Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{filename}.tar.gz
+Patch2:		avidemux-2.5.1-opencore-check.patch
+Patch3:		avidemux-jack-underlinking.patch
+Patch4:		avidemux-fix-cmake.patch
+Patch5:		avidemux-mpeg2enc-underlinking.patch
+Patch6:		CVE-2011-3893.patch
+Patch7:		CVE-2011-3895.patch
+Patch8:		CVE-2012-0947.patch
 BuildRequires:	cmake
+BuildRequires:	imagemagick
 BuildRequires:	libxslt-proc
+BuildRequires:	nasm
+BuildRequires:	qt4-linguist
+BuildRequires:	yasm
+BuildRequires:	gettext-devel
+BuildRequires:	liba52dec-devel
+BuildRequires:	qt4-devel
+BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(esound)
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(libva)
+BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(mad)
+BuildRequires:	pkgconfig(samplerate)
+BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(vorbis)
+BuildRequires:	pkgconfig(xv)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
-BuildRequires:	libxvid-devel
-BuildRequires:	liblame-devel
-BuildRequires:	libfaad2-devel
 BuildRequires:	libfaac-devel
-%if %with_x264
-BuildRequires:	x264-devel >= 0.67
+BuildRequires:	libfaad2-devel
+BuildRequires:	liblame-devel
+BuildRequires:	libxvid-devel
+BuildRequires:	pkgconfig(opencore-amrnb)
+BuildRequires:	pkgconfig(opencore-amrwb)
+BuildRequires:	pkgconfig(x264)
 %endif
-BuildRequires:	opencore-amr-devel
-%endif
-BuildRequires:	imagemagick
-BuildRequires:	yasm
 Requires:	avidemux-ui
 
 %description
@@ -82,43 +68,43 @@ codecs. Tasks can be automated using projects, job queue and
 powerful scripting capabilities.
 
 %if %with plf
-This package is in PLF because this build has support for codecs
+This package is in restricted because this build has support for codecs
 covered by software patents.
 %endif
 
 %package gtk
-Summary:	%{pkgsummary} - GTK GUI
+Summary:	A free video editor - GTK GUI
 Group:		Video
-Requires: gtk+2.0 >= 2.6.0
-Requires: %{name} = %{version}-%{release}
-Provides: avidemux-ui = %{version}-%{release}
+Requires:	gtk+2.0 >= 2.6.0
+Requires:	%{name} = %{version}-%{release}
+Provides:	avidemux-ui = %{version}-%{release}
 
 %description gtk
 Avidemux is a free video editor. This package contains the
 version with a graphical user interface based on GTK.
 
 %package qt
-Summary:	%{pkgsummary} - Qt4 GUI
+Summary:	A free video editor - Qt4 GUI
 Group:		Video
-Requires: %{name} = %{version}-%{release}
-Provides: avidemux-ui = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+Provides:	avidemux-ui = %{version}-%{release}
 
 %description qt
 Avidemux is a free video editor. This package contains the
 version with a graphical user interface based on Qt4.
 
 %package cli
-Summary:	%{pkgsummary} - command-line version
+Summary:	A free video editor - command-line version
 Group:		Video
-Requires: %{name} = %{version}-%{release}
-Provides: avidemux-ui = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+Provides:	avidemux-ui = %{version}-%{release}
 
 %description cli
 Avidemux is a free video editor. This package contains the
 version with a command-line interface.
 
 %if %with plf
-This package is in PLF because this build has support for codecs
+This package is in restricted because this build has support for codecs
 covered by software patents.
 %endif
 
@@ -126,11 +112,19 @@ covered by software patents.
 %setup -q -n %{filename}
 %patch2 -p1
 %patch3 -p1
+%patch4 -p0
 %patch5 -p1
+
+pushd avidemux/ADM_libraries
+
+tar -xjf ffmpeg-0.9.tar.bz2 && rm -f ffmpeg-0.9.tar.bz2
+pushd ffmpeg-0.9
+%patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%__cp %{SOURCE1} avidemux/ADM_libraries/
-
+popd
+tar -cjf ffmpeg-0.9.tar.bz2 ffmpeg-0.9 && rm -rf ffmpeg-0.9
+popd
 
 # libdir is nicely hardcoded
 sed -i 's,Dir="lib",Dir="%{_lib}",' avidemux/main.cpp avidemux/ADM_core/src/ADM_fileio.cpp
@@ -148,14 +142,13 @@ make
 # in build/ by symlinking all libraries to build/lib/
 mkdir -p %{_lib}
 cd %{_lib}
-find ../avidemux -name '*.so*' | xargs ln -sft . 
+find ../avidemux -name '*.so*' | xargs ln -sft .
 cd ../../plugins
 %cmake -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{filename} -DAVIDEMUX_CORECONFIG_DIR=%{_builddir}/%{filename}/build/config -DAVIDEMUX_INSTALL_PREFIX=%{_builddir}/%{filename}/build
 make
 
 
 %install
-rm -rf %{buildroot}
 cd build
 %makeinstall_std
 mkdir -p %{buildroot}%{_libdir}
@@ -181,8 +174,8 @@ convert avidemux_icon.png -resize 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 mkdir -p %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-gtk.desktop << EOF
 [Desktop Entry]
-Name=%{Name}
-Comment=%{pkgsummary}
+Name=Avidemux
+Comment=A free video editor
 Exec=%{_bindir}/%{name}2_gtk %U
 Icon=%{name}
 Terminal=false
@@ -192,8 +185,8 @@ Categories=AudioVideo;Video;AudioVideoEditing;GTK;
 EOF
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-qt.desktop << EOF
 [Desktop Entry]
-Name=%{Name}
-Comment=%{pkgsummary}
+Name=Avidemux
+Comment=A free video editor
 Exec=%{_bindir}/%{name}2_qt4 %U
 Icon=%{name}
 Terminal=false
@@ -206,11 +199,7 @@ rm -rf %{buildroot}%{_datadir}/locale/klingon
 
 %find_lang %{name}
 
-%clean 
-rm -rf %{buildroot}
-
 %files -f %{name}.lang
-%defattr(-,root,root)
 %doc AUTHORS
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
@@ -233,7 +222,6 @@ rm -rf %{buildroot}
 %{_libdir}/ADM_plugins/audioDecoder/libADM_ad_vorbis.so
 %dir %{_libdir}/ADM_plugins/audioDevices
 %{_libdir}/ADM_plugins/audioDevices/libADM_av_alsa.so
-#%_libdir/ADM_plugins/audioDevices/libADM_av_arts.so
 %{_libdir}/ADM_plugins/audioDevices/libADM_av_esd.so
 %{_libdir}/ADM_plugins/audioDevices/libADM_av_jack.so
 %{_libdir}/ADM_plugins/audioDevices/libADM_av_oss.so
@@ -249,12 +237,9 @@ rm -rf %{buildroot}
 %if %with plf
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_faac.so
 %{_libdir}/ADM_plugins/audioEncoders/libADM_ae_lame.so
-%if %with_x264
 %{_libdir}/ADM_plugins/videoEncoder/libADM_vidEnc_x264.so
-%dir %{_libdir}/ADM_plugins/videoEncoder/x264/
 %{_libdir}/ADM_plugins/videoEncoder/x264/*.xml
 %{_libdir}/ADM_plugins/videoEncoder/x264/*.xsd
-%endif
 %{_libdir}/ADM_plugins/videoEncoder/libADM_vidEnc_xvid.so
 %dir %{_libdir}/ADM_plugins/videoEncoder/xvid
 %{_libdir}/ADM_plugins/videoEncoder/xvid/*.xsd
@@ -331,15 +316,12 @@ rm -rf %{buildroot}
 %{_datadir}/ADM_addons/avsfilter
 
 %files gtk
-%defattr(-,root,root)
 %{_bindir}/avidemux2_gtk
 %{_datadir}/applications/mandriva-avidemux-gtk.desktop
 %{_libdir}/libADM_render_gtk.so
 %{_libdir}/libADM_UIGtk.so
 %if %with plf
-%if %with_x264
 %{_libdir}/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Gtk.so
-%endif
 %{_libdir}/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Gtk.so
 %endif
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_Crop_gtk.so
@@ -357,7 +339,6 @@ rm -rf %{buildroot}
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_sub_gtk.so
 
 %files qt
-%defattr(-,root,root)
 %{_bindir}/avidemux2_qt4
 %{_datadir}/applications/mandriva-avidemux-qt.desktop
 %dir %{_datadir}/%{name}
@@ -366,9 +347,7 @@ rm -rf %{buildroot}
 %{_libdir}/libADM_render_qt4.so
 %{_libdir}/libADM_UIQT4.so
 %if %with plf
-%if %with_x264
 %{_libdir}/ADM_plugins/videoEncoder/x264/libADM_vidEnc_x264_Qt.so
-%endif
 %{_libdir}/ADM_plugins/videoEncoder/xvid/libADM_vidEnc_Xvid_Qt.so
 %endif
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_crop_qt4.so
@@ -387,7 +366,6 @@ rm -rf %{buildroot}
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_sub_qt4.so
 
 %files cli
-%defattr(-,root,root)
 %doc README
 %{_bindir}/avidemux2_cli
 %{_libdir}/libADM_render_cli.so
@@ -405,3 +383,5 @@ rm -rf %{buildroot}
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_mpdelogo_cli.so
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_mplayerResize_cli.so
 %{_libdir}/ADM_plugins/videoFilter/libADM_vf_sub_cli.so
+
+
