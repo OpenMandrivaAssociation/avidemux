@@ -12,10 +12,10 @@
 %define extrarelsuffix plf
 %endif
 
+Summary:	A free video editor
 Name:		avidemux
 Version:	2.5.6
 Release:	3%{?extrarelsuffix}
-Summary:	A free video editor
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -27,17 +27,18 @@ Patch5:		avidemux-mpeg2enc-underlinking.patch
 Patch6:		CVE-2011-3893.patch
 Patch7:		CVE-2011-3895.patch
 Patch8:		CVE-2012-0947.patch
+
 BuildRequires:	cmake
 BuildRequires:	imagemagick
-BuildRequires:	libxslt-proc
 BuildRequires:	nasm
 BuildRequires:	qt4-linguist
+BuildRequires:	xsltproc
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
-BuildRequires:	liba52dec-devel
+BuildRequires:	a52dec-devel
 BuildRequires:	qt4-devel
-BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(esound)
+BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
@@ -109,7 +110,7 @@ covered by software patents.
 %endif
 
 %prep
-%setup -q -n %{filename}
+%setup -qn %{filename}
 %patch2 -p1
 %patch3 -p1
 %patch4 -p0
@@ -144,9 +145,11 @@ mkdir -p %{_lib}
 cd %{_lib}
 find ../avidemux -name '*.so*' | xargs ln -sft .
 cd ../../plugins
-%cmake -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{filename} -DAVIDEMUX_CORECONFIG_DIR=%{_builddir}/%{filename}/build/config -DAVIDEMUX_INSTALL_PREFIX=%{_builddir}/%{filename}/build
+%cmake \
+	-DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{filename} \
+	-DAVIDEMUX_CORECONFIG_DIR=%{_builddir}/%{filename}/build/config \
+	-DAVIDEMUX_INSTALL_PREFIX=%{_builddir}/%{filename}/build
 make
-
 
 %install
 cd build
@@ -172,7 +175,7 @@ convert avidemux_icon.png -resize 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 
 # menu
 mkdir -p %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-gtk.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/%{name}-gtk.desktop << EOF
 [Desktop Entry]
 Name=Avidemux
 Comment=A free video editor
@@ -183,7 +186,7 @@ Type=Application
 StartupNotify=true
 Categories=AudioVideo;Video;AudioVideoEditing;GTK;
 EOF
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-qt.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/%{name}-qt.desktop << EOF
 [Desktop Entry]
 Name=Avidemux
 Comment=A free video editor
@@ -317,7 +320,7 @@ rm -rf %{buildroot}%{_datadir}/locale/klingon
 
 %files gtk
 %{_bindir}/avidemux2_gtk
-%{_datadir}/applications/mandriva-avidemux-gtk.desktop
+%{_datadir}/applications/avidemux-gtk.desktop
 %{_libdir}/libADM_render_gtk.so
 %{_libdir}/libADM_UIGtk.so
 %if %with plf
@@ -340,7 +343,7 @@ rm -rf %{buildroot}%{_datadir}/locale/klingon
 
 %files qt
 %{_bindir}/avidemux2_qt4
-%{_datadir}/applications/mandriva-avidemux-qt.desktop
+%{_datadir}/applications/avidemux-qt.desktop
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/i18n
 %{_datadir}/%{name}/i18n/*.qm
