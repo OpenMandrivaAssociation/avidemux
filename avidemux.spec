@@ -152,14 +152,12 @@ cd ../../plugins
 make
 
 %install
-cd build
-%makeinstall_std
+%makeinstall_std -C
 mkdir -p %{buildroot}%{_libdir}
-cd ..
 
-cd plugins/build
-%makeinstall_std
+%makeinstall_std -C plugins/build
 #gw install this manually:
+cd plugins/build
 cp ADM_videoEncoder/ADM_vidEnc_mpeg2enc/mpeg2enc/libmpeg2enc.so \
   ADM_videoEncoder/common/pluginOptions/libADM_vidEnc_pluginOptions.so \
   ADM_videoEncoder/common/xvidRateCtl/libADM_xvidRateCtl.so %{buildroot}%{_libdir}
