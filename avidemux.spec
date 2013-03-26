@@ -152,7 +152,7 @@ cd ../../plugins
 make
 
 %install
-%makeinstall_std -C
+%makeinstall_std -C build
 mkdir -p %{buildroot}%{_libdir}
 
 %makeinstall_std -C plugins/build
