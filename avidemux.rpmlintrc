@@ -1,0 +1,2 @@
+# We really want it to be -qt, not -qt4
+addFilter("E: incoherent-version-in-name")

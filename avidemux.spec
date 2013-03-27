@@ -20,6 +20,7 @@ License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{filename}.tar.gz
+Source100:	%{name}.rpmlintrc
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
