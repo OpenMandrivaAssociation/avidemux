@@ -36,7 +36,7 @@ BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
 BuildRequires:	qt4-devel
-BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
@@ -57,6 +57,7 @@ BuildRequires:	pkgconfig(opencore-amrnb)
 BuildRequires:	pkgconfig(opencore-amrwb)
 BuildRequires:	pkgconfig(x264)
 %endif
+BuildRequires:	pkgconfig(glu)
 Requires:	avidemux-ui
 
 %description
