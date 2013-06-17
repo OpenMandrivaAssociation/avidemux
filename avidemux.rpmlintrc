@@ -1,2 +1,7 @@
 # We really want it to be -qt, not -qt4
 addFilter("E: incoherent-version-in-name")
+# Let's let this pass for now
+addFilter("E: devel-file-in-non-devel-package")
+# All problems below are caused by plugins being seen as shared libraries
+addFilter("E: library-not-linked-against-libc")
+addFilter("E: invalid-soname")
