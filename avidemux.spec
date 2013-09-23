@@ -15,14 +15,14 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.6.4
+Version:	2.6.5
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{filename}.tar.gz
 Source100:	%{name}.rpmlintrc
-Patch1:		avidemux-2.6.4-compile.patch
+Patch1:		avidemux-2.6.5-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
