@@ -1,5 +1,5 @@
 %define filename %{name}_%{version}
-%define debug_package %nil
+%define _disable_ld_no_undefined 1
 
 #############################
 # Hardcore PLF build
@@ -114,6 +114,10 @@ covered by software patents.
 
 
 %build
+%setup_compile_flags
+export CFLAGS="%{optflags} -fno-strict-aliasing"
+export CXXFLAGS="%{optflags} -fno-strict-aliasing"
+
 TOP=`pwd`
 touch previous.dirs
 touch previous.files
@@ -122,7 +126,7 @@ cd build
 for i in avidemux_core avidemux/qt4 avidemux/cli avidemux/gtk; do
 	mkdir -p $i
 	cd $i
-	cmake $TOP/$i -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix
+	cmake $TOP/$i -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
 	make
 	make install DESTDIR=$TOP/DEST
 	cd -
@@ -140,7 +144,7 @@ done
 for i in COMMON QT4 GTK CLI SETTINGS; do
 	mkdir -p $i
 	cd $i
-	cmake $TOP/avidemux_plugins -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i
+	cmake $TOP/avidemux_plugins -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i -DCMAKE_STRIP=/bin/true
 	make
 	make install DESTDIR=$TOP/DEST
 	cd -
@@ -197,7 +201,7 @@ EOF
 
 # Workaround for identical build IDs in nonidentical files
 # FIXME this should really get a proper fix inside gold some time soon
-%__strip --strip-unneeded %buildroot%_bindir/*
+#__strip --strip-unneeded %buildroot%_bindir/*
 
 find build -name file.list |xargs sed -i -e 's,^\.,,'
 # Don't own standard dirs
