@@ -16,7 +16,7 @@
 Summary:	A free video editor
 Name:		avidemux
 Version:	2.6.6
-Release:	1%{?extrarelsuffix}
+Release:	2%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -36,7 +36,6 @@ BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
 BuildRequires:	qt4-devel
-BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
@@ -71,17 +70,6 @@ powerful scripting capabilities.
 This package is in restricted because this build has support for codecs
 covered by software patents.
 %endif
-
-%package gtk
-Summary:	A free video editor - GTK GUI
-Group:		Video
-Requires:	gtk+2.0 >= 2.6.0
-Requires:	%{name} = %{version}-%{release}
-Provides:	avidemux-ui = %{version}-%{release}
-
-%description gtk
-Avidemux is a free video editor. This package contains the
-version with a graphical user interface based on GTK.
 
 %package qt
 Summary:	A free video editor - Qt4 GUI
@@ -123,7 +111,7 @@ touch previous.dirs
 touch previous.files
 mkdir build
 cd build
-for i in avidemux_core avidemux/qt4 avidemux/cli avidemux/gtk; do
+for i in avidemux_core avidemux/qt4 avidemux/cli; do
 	mkdir -p $i
 	cd $i
 	cmake $TOP/$i -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
@@ -141,7 +129,7 @@ for i in avidemux_core avidemux/qt4 avidemux/cli avidemux/gtk; do
 	mv -f $TOP/tmp $TOP/previous.dirs
 	cd -
 done
-for i in COMMON QT4 GTK CLI SETTINGS; do
+for i in COMMON QT4 CLI SETTINGS; do
 	mkdir -p $i
 	cd $i
 	cmake $TOP/avidemux_plugins -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i -DCMAKE_STRIP=/bin/true
@@ -173,18 +161,6 @@ convert avidemux_icon.png -resize 32x32 %{buildroot}%{_iconsdir}/%{name}.png
 convert avidemux_icon.png -resize 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 
 # menu
-mkdir -p %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/%{name}-gtk.desktop << EOF
-[Desktop Entry]
-Name=Avidemux
-Comment=A free video editor
-Exec=%{_bindir}/%{name}3_gtk %U
-Icon=%{name}
-Terminal=false
-Type=Application
-StartupNotify=true
-Categories=AudioVideo;Video;AudioVideoEditing;GTK;
-EOF
 cat > %{buildroot}%{_datadir}/applications/%{name}-qt.desktop << EOF
 [Desktop Entry]
 Name=Avidemux
@@ -215,9 +191,6 @@ done
 %files -f %{name}.lang -f build/avidemux_core/file.list,build/SETTINGS/file.list,build/COMMON/file.list
 %_datadir/icons/*.png
 %_datadir/icons/*/*
-
-%files gtk -f build/avidemux/gtk/file.list,build/GTK/file.list
-%{_datadir}/applications/avidemux-gtk.desktop
 
 %files qt -f build/avidemux/qt4/file.list,build/QT4/file.list
 %{_datadir}/applications/avidemux-qt.desktop
