@@ -161,6 +161,7 @@ convert avidemux_icon.png -resize 32x32 %{buildroot}%{_iconsdir}/%{name}.png
 convert avidemux_icon.png -resize 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 
 # menu
+mkdir -p %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/%{name}-qt.desktop << EOF
 [Desktop Entry]
 Name=Avidemux
