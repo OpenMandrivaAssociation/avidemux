@@ -29,6 +29,8 @@ Patch1:		avidemux-2.6.5-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
+Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
+Patch6:		avidemux-2.6.8-cmake-3.1.patch
 BuildRequires:	cmake
 BuildRequires:	imagemagick
 BuildRequires:	nasm
