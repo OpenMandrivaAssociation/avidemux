@@ -1,5 +1,6 @@
 %define filename %{name}_%{version}
 %define _disable_ld_no_undefined 1
+%define _disable_lto 1
 
 %define ffmpeg_version 2.6.4
 
