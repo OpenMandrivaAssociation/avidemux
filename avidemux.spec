@@ -1,7 +1,7 @@
 %define filename %{name}_%{version}
 %define _disable_ld_no_undefined 1
 
-%define ffmpeg_version 1.2.12
+%define ffmpeg_version 2.6.4
 
 #############################
 # Hardcore PLF build
@@ -17,7 +17,7 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.6.8
+Version:	2.6.10
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
@@ -30,7 +30,6 @@ Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
 Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
-Patch6:		avidemux-2.6.8-cmake-3.1.patch
 BuildRequires:	cmake
 BuildRequires:	imagemagick
 BuildRequires:	nasm
@@ -103,7 +102,7 @@ covered by software patents.
 %prep
 %setup -qn %{filename}
 
-sed -i 's/set(FFMPEG_VERSION "1.2.1")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
+sed -i 's/set(FFMPEG_VERSION "2.6.1")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
 rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
 cp %{SOURCE1} avidemux_core/ffmpeg_package/
 
