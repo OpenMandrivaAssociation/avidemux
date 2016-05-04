@@ -19,14 +19,14 @@
 Summary:	A free video editor
 Name:		avidemux
 Version:	2.6.12
-Release:	1%{?extrarelsuffix}
+Release:	2%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{filename}.tar.gz
 Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
-#Patch1:		avidemux-2.6.5-compile.patch
+Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
@@ -34,12 +34,18 @@ Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
 BuildRequires:	cmake
 BuildRequires:	imagemagick
 BuildRequires:	nasm
-BuildRequires:	qt4-linguist
 BuildRequires:	xsltproc
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
-BuildRequires:	qt4-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5OpenGL)
+BuildRequires:  pkgconfig(Qt5Script)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  qmake5
+BuildRequires:  qt5-linguist-tools
+BuildRequires:  qt5-qttools
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
@@ -103,6 +109,8 @@ covered by software patents.
 %prep
 %setup -qn %{filename}
 
+dos2unix avidemux/common/ADM_render/CMakeLists.txt
+
 sed -i 's/set(FFMPEG_VERSION "2.7.6")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
 rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
 cp %{SOURCE1} avidemux_core/ffmpeg_package/
@@ -115,6 +123,8 @@ cp %{SOURCE1} avidemux_core/ffmpeg_package/
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 
+export PATH=%{_libdir}/qt5/bin:$PATH
+
 TOP=`pwd`
 touch previous.dirs
 touch previous.files
@@ -123,7 +133,7 @@ cd build
 for i in avidemux_core avidemux/qt4 avidemux/cli; do
 	mkdir -p $i
 	cd $i
-	cmake $TOP/$i -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
+	cmake $TOP/$i -DENABLE_QT5=True -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
 	make
 	make install DESTDIR=$TOP/DEST
 	cd -
@@ -141,7 +151,7 @@ done
 for i in COMMON QT4 CLI SETTINGS; do
 	mkdir -p $i
 	cd $i
-	cmake $TOP/avidemux_plugins -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i -DCMAKE_STRIP=/bin/true
+	cmake $TOP/avidemux_plugins -DENABLE_QT5=True -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i -DCMAKE_STRIP=/bin/true
 	make
 	make install DESTDIR=$TOP/DEST
 	cd -
@@ -175,7 +185,7 @@ cat > %{buildroot}%{_datadir}/applications/%{name}-qt.desktop << EOF
 [Desktop Entry]
 Name=Avidemux
 Comment=A free video editor
-Exec=%{_bindir}/%{name}3_qt4 %U
+Exec=%{_bindir}/%{name}3_qt5 %U
 Icon=%{name}
 Terminal=false
 Type=Application
