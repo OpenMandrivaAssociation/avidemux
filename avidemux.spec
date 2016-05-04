@@ -32,6 +32,7 @@ Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
 Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
 BuildRequires:	cmake
+BuildRequires:	dos2unix
 BuildRequires:	imagemagick
 BuildRequires:	nasm
 BuildRequires:	xsltproc
