@@ -19,7 +19,7 @@
 Summary:	A free video editor
 Name:		avidemux
 Version:	2.6.12
-Release:	2%{?extrarelsuffix}
+Release:	3%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
@@ -83,14 +83,14 @@ covered by software patents.
 %endif
 
 %package qt
-Summary:	A free video editor - Qt4 GUI
+Summary:	A free video editor - Qt5 GUI
 Group:		Video
 Requires:	%{name} = %{version}-%{release}
 Provides:	avidemux-ui = %{version}-%{release}
 
 %description qt
 Avidemux is a free video editor. This package contains the
-version with a graphical user interface based on Qt4.
+version with a graphical user interface based on Qt5.
 
 %package cli
 Summary:	A free video editor - command-line version
