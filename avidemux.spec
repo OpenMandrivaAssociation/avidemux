@@ -2,7 +2,7 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
-%define ffmpeg_version 2.7.7
+#define ffmpeg_version 2.7.7
 
 #############################
 # Hardcore PLF build
@@ -18,19 +18,20 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.6.12
-Release:	3%{?extrarelsuffix}
+Version:	2.7.0
+Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
-Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{filename}.tar.gz
-Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
+Source0:	http://www.fosshub.com/Avidemux.html/avidemux_%{version}.tar.gz
+#Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
 Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
+Patch6:		avidemux-2.7.0-c++.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
@@ -47,6 +48,7 @@ BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  qmake5
 BuildRequires:  qt5-linguist-tools
 BuildRequires:  qt5-qttools
+BuildRequires:	%{_lib}qt5gui5-vnc
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
@@ -112,14 +114,19 @@ covered by software patents.
 
 dos2unix avidemux/common/ADM_render/CMakeLists.txt
 
-sed -i 's/set(FFMPEG_VERSION "2.7.6")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
-rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
-cp %{SOURCE1} avidemux_core/ffmpeg_package/
+#sed -i 's/set(FFMPEG_VERSION "2.7.6")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
+#rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
+#cp %{SOURCE1} avidemux_core/ffmpeg_package/
 
 %apply_patches
 
 
 %build
+# Get rid of patch backups -- some CMake files in avidemux
+# package all files in a directory as headers to be installed
+# and included in the final package...
+find . -name "*.*~" |xargs rm
+
 %setup_compile_flags
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"
@@ -135,7 +142,7 @@ for i in avidemux_core avidemux/qt4 avidemux/cli; do
 	mkdir -p $i
 	cd $i
 	cmake $TOP/$i -DENABLE_QT5=True -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
-	make
+	%make
 	make install DESTDIR=$TOP/DEST
 	cd -
 	cd $TOP/DEST
