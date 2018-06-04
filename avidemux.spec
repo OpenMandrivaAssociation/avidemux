@@ -58,6 +58,7 @@ BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
+BuildRequires:	pkgconfig(sqlite3)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
