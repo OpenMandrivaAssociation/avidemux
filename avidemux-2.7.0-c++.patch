@@ -1,0 +1,34 @@
+--- avidemux_2.7.0/avidemux_core/ffmpeg_package/patches/libavutil_cpp.patch.0006~	2017-11-25 19:34:08.728563004 +0100
++++ avidemux_2.7.0/avidemux_core/ffmpeg_package/patches/libavutil_cpp.patch	2017-11-25 19:34:08.728563004 +0100
+@@ -0,0 +1,11 @@
++--- libavutil/timer.h.omv~	2017-11-24 00:04:13.853962788 +0100
+++++ libavutil/timer.h	2017-11-24 00:04:19.930971024 +0100
++@@ -83,7 +83,7 @@
++         if (((tcount + tskip_count) & (tcount + tskip_count - 1)) == 0) { \
++             int i;                                                        \
++             av_log(NULL, AV_LOG_ERROR,                                    \
++-                   "%7"PRIu64" " FF_TIMER_UNITS " in %s,%8d runs,%7d skips",          \
+++                   "%7" PRIu64 " " FF_TIMER_UNITS " in %s,%8d runs,%7d skips",          \
++                    tsum * 10 / tcount, id, tcount, tskip_count);          \
++             for (i = 0; i < 32; i++)                                      \
++                 av_log(NULL, AV_LOG_VERBOSE, " %2d", av_log2(2*thistogram[i]));\
+--- avidemux_2.7.0/avidemux_plugins/ADM_audioDevices/Alsa/ADM_deviceALSA.cpp.0006~	2017-08-14 17:54:51.000000000 +0200
++++ avidemux_2.7.0/avidemux_plugins/ADM_audioDevices/Alsa/ADM_deviceALSA.cpp	2017-11-25 20:19:31.417155141 +0100
+@@ -140,7 +140,7 @@ bool alsaAudioDevice::localInit( void )
+     dir=0;
+     exact_rate = snd_pcm_hw_params_set_rate_near(pcm_handle, hwparams, &_frequency, &dir);
+     if (dir != 0) {
+-      fprintf(stderr, "[Alsa]The rate %"PRIu32" Hz is not supported by your hardware.\n  ==> Using %d Hz instead.\n", _frequency, exact_rate);
++      fprintf(stderr, "[Alsa]The rate %" PRIu32 " Hz is not supported by your hardware.\n  ==> Using %d Hz instead.\n", _frequency, exact_rate);
+     }
+ 
+     /* Set number of channels */
+@@ -391,7 +391,7 @@ uint8_t alsaAudioDevice::setVolume(int v
+ 				if( (rc=snd_mixer_selem_set_playback_volume_all(elem,volume*max/100)) < 0 ){
+ 					printf("[Alsa]: snd_mixer_selem_set_playback_volume_all failed: %d\n",rc);
+ 				}
+-				printf("[Alsa]: new %s val: %"PRIu32"\n",(which_vol?"master":"pcm"),volume);
++				printf("[Alsa]: new %s val: %" PRIu32 "\n",(which_vol?"master":"pcm"),volume);
+ 				break;
+ 			}
+ 		}
