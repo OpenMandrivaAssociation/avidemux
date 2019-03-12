@@ -31,7 +31,7 @@ Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
-Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
+#Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
 #Patch6:		avidemux-2.7.0-c++.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
@@ -41,6 +41,7 @@ BuildRequires:	xsltproc
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
+BuildRequires: liblame-devel
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5OpenGL)
@@ -62,12 +63,14 @@ BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires: pkgconfig(libass)
 BuildRequires: pkgconfig(vpx)
+BuildRequires: pkgconfig(twolame)
+BuildRequires: pkgconfig(opus)	
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
 BuildRequires:	libfaac-devel
 BuildRequires:	libfaad2-devel
-BuildRequires:	liblame-devel
+BuildRequires: pkgconfig(libdca)
 BuildRequires:	libxvid-devel
 BuildRequires:	pkgconfig(opencore-amrnb)
 BuildRequires:	pkgconfig(opencore-amrwb)
@@ -173,8 +176,7 @@ bash bootStrap.bash \
      --with-plugins \
      --with-system-libass \
      --with-system-liba52 \
-     --with-system-libmad \
-     --with-system-libmp4v2
+     --with-system-libmad
 
 %install
 cp -a install/* %{buildroot}
