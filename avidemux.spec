@@ -61,7 +61,7 @@ BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires: pkgconfig(libass)
-BuildRequires: pkgconfig(libvpx)
+BuildRequires: pkgconfig(vpx)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
