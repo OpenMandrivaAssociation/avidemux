@@ -65,6 +65,7 @@ BuildRequires: pkgconfig(libass)
 BuildRequires: pkgconfig(vpx)
 BuildRequires: pkgconfig(twolame)
 BuildRequires: pkgconfig(opus)	
+BuildRequires: pkgconfig(ffnvcodec)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
