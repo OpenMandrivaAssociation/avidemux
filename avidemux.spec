@@ -1,3 +1,4 @@
+%define libname		%mklibname %{name}
 %define filename %{name}_%{version}
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
@@ -18,7 +19,7 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.7.1
+Version:	2.7.2
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
@@ -30,8 +31,8 @@ Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
-Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
-Patch6:		avidemux-2.7.0-c++.patch
+#Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
+#Patch6:		avidemux-2.7.0-c++.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
@@ -40,6 +41,7 @@ BuildRequires:	xsltproc
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
+BuildRequires: lame-devel
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5OpenGL)
@@ -55,20 +57,26 @@ BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(mad)
 BuildRequires:	pkgconfig(samplerate)
-BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
+BuildRequires: pkgconfig(libass)
+BuildRequires: pkgconfig(vpx)
+BuildRequires: pkgconfig(twolame)
+BuildRequires: pkgconfig(opus)	
+BuildRequires: pkgconfig(ffnvcodec)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
 BuildRequires:	libfaac-devel
 BuildRequires:	libfaad2-devel
-BuildRequires:	liblame-devel
+BuildRequires: pkgconfig(libdca)
 BuildRequires:	libxvid-devel
 BuildRequires:	pkgconfig(opencore-amrnb)
 BuildRequires:	pkgconfig(opencore-amrwb)
 BuildRequires:	pkgconfig(x264)
+BuildRequires: pkgconfig(x265)
 %endif
 BuildRequires:	pkgconfig(glu)
 Requires:	avidemux-ui
@@ -85,25 +93,57 @@ This package is in restricted because this build has support for codecs
 covered by software patents.
 %endif
 
-%package qt
-Summary:	A free video editor - Qt5 GUI
-Group:		Video
-Requires:	%{name} = %{version}-%{release}
-Provides:	avidemux-ui = %{version}-%{release}
+%package -n	%{libname}
+Summary:	Shared libraries for %{name}
 
-%description qt
-Avidemux is a free video editor. This package contains the
-version with a graphical user interface based on Qt5.
+%description -n	%{libname}
+Shared libraries for %{name}.
 
-%package cli
-Summary:	A free video editor - command-line version
-Group:		Video
-Requires:	%{name} = %{version}-%{release}
-Provides:	avidemux-ui = %{version}-%{release}
+%package	devel
+Summary:	Header files for %{name}
+Requires:	%{libname} = %{version}
+Requires:	pkgconfig(vdpau)
+Obsoletes:	%{name}-qt-devel < %{version}-%{release}
+Obsoletes:	%{name}-cli-devel < %{version}-%{release}
 
-%description cli
-Avidemux is a free video editor. This package contains the
-version with a command-line interface.
+%description	devel
+Header files for %{name}.
+
+%package	cli
+Summary:	Command line interface for %{name}
+%rename		%{name}
+Recommends:	%{name}-plugins
+Recommends:	%{name}-cli-plugins
+
+%description	cli
+This package contains the command-line interface for %{name}.
+
+%package	qt
+Summary:	Qt5 graphical user interface for %{name}
+%rename		%{name}
+Recommends:	%{name}-plugins
+Recommends:	%{name}-qt-plugins
+
+%description	qt
+This package contains the Qt5 graphical user interface for %{name}.
+
+%package	plugins
+Summary:	Plugins for %{name}
+
+%description	plugins
+This package contains the common plugins for %{name}.
+
+%package	cli-plugins
+Summary:	Plugins for %{name}-cli
+
+%description	cli-plugins
+This package contains the plugins for the %{name} command-line interface.
+
+%package	qt-plugins
+Summary:	Plugins for %{name}-qt
+
+%description	qt-plugins
+This package contains the plugins for the %{name} graphical user interface.
 
 %if %with plf
 This package is in restricted because this build has support for codecs
@@ -123,10 +163,7 @@ dos2unix avidemux/common/ADM_render/CMakeLists.txt
 
 
 %build
-# Get rid of patch backups -- some CMake files in avidemux
-# package all files in a directory as headers to be installed
-# and included in the final package...
-find . -name "*.*~" |xargs rm
+
 
 %setup_compile_flags
 export CFLAGS="%{optflags} -fno-strict-aliasing"
@@ -134,94 +171,61 @@ export CXXFLAGS="%{optflags} -fno-strict-aliasing"
 
 export PATH=%{_libdir}/qt5/bin:$PATH
 
-TOP=`pwd`
-touch previous.dirs
-touch previous.files
-mkdir build
-cd build
-for i in avidemux_core avidemux/qt4 avidemux/cli; do
-	mkdir -p $i
-	cd $i
-	cmake $TOP/$i -DENABLE_QT5=True -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DCMAKE_STRIP=/bin/true
-	%make
-	make install DESTDIR=$TOP/DEST
-	cd -
-	cd $TOP/DEST
-	find . -type d >$TOP/current.dirs
-	find . -type f >$TOP/current.files
-	cat $TOP/previous.files $TOP/previous.files $TOP/current.files |sort |uniq -u >$TOP/build/$i/file.list
-	cat $TOP/previous.dirs $TOP/previous.dirs $TOP/current.dirs |sort |uniq -u >$TOP/build/$i/dirs.list
-	cat $TOP/previous.files $TOP/build/$i/file.list |sort >$TOP/tmp
-	mv -f $TOP/tmp $TOP/previous.files
-	cat $TOP/previous.dirs $TOP/build/$i/dirs.list |sort >$TOP/tmp
-	mv -f $TOP/tmp $TOP/previous.dirs
-	cd -
-done
-for i in COMMON QT4 CLI SETTINGS; do
-	mkdir -p $i
-	cd $i
-	cmake $TOP/avidemux_plugins -DENABLE_QT5=True -DAVIDEMUX_SOURCE_DIR=$TOP -DFAKEROOT=$TOP/DEST -DCMAKE_INSTALL_PREFIX=%_prefix -DPLUGIN_UI=$i -DCMAKE_STRIP=/bin/true
-	make
-	make install DESTDIR=$TOP/DEST
-	cd -
-	cd $TOP/DEST
-	find . -type d >$TOP/current.dirs
-	find . -type f >$TOP/current.files
-	cat $TOP/previous.files $TOP/previous.files $TOP/current.files |sort |uniq -u >$TOP/build/$i/file.list
-	cat $TOP/previous.dirs $TOP/previous.dirs $TOP/current.dirs |sort |uniq -u >$TOP/build/$i/dirs.list
-	cat $TOP/previous.files $TOP/build/$i/file.list |sort >$TOP/tmp
-	mv -f $TOP/tmp $TOP/previous.files
-	cat $TOP/previous.dirs $TOP/build/$i/dirs.list |sort >$TOP/tmp
-	mv -f $TOP/tmp $TOP/previous.dirs
-	cd -
-done
+bash bootStrap.bash \
+     --with-core \
+     --with-cli \
+     --with-plugins \
+     --with-system-libass \
+     --with-system-liba52 \
+     --with-system-libmad
 
 %install
-mkdir -p %{buildroot}
-cp -a DEST/* %{buildroot}
+cp -a install/* %{buildroot}
+mkdir -p %{buildroot}%{_mandir}/man1
+install -m 644 man/avidemux.1 %{buildroot}%{_mandir}/man1
+chrpath --delete %{buildroot}%{_libdir}/*.so*
+chrpath --delete %{buildroot}%{_libdir}/ADM_plugins6/*/*.so
+chrpath --delete %{buildroot}%{_bindir}/*
+rm -rf %{buildroot}%{_datadir}/ADM6_addons
 
-# icons
-install -d -m755 %{buildroot}%{_liconsdir}
-install -d -m755 %{buildroot}%{_iconsdir}
-install -d -m755 %{buildroot}%{_miconsdir}
-convert avidemux_icon.png -resize 48x48 %{buildroot}%{_liconsdir}/%{name}.png
-convert avidemux_icon.png -resize 32x32 %{buildroot}%{_iconsdir}/%{name}.png
-convert avidemux_icon.png -resize 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 
-# menu
-mkdir -p %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/%{name}-qt.desktop << EOF
-[Desktop Entry]
-Name=Avidemux
-Comment=A free video editor
-Exec=%{_bindir}/%{name}3_qt5 %U
-Icon=%{name}
-Terminal=false
-Type=Application
-StartupNotify=true
-Categories=AudioVideo;Video;AudioVideoEditing;Qt;
-EOF
+%files -n %{libname}
+%{_libdir}/libADM_audio*.so
+%{_libdir}/libADM_core*.so
+%{_libdir}/libADM6*.so.*
 
-%find_lang %{name} || touch %name.lang
+%files devel
+%{_includedir}/%{name}
 
-# Workaround for identical build IDs in nonidentical files
-# FIXME this should really get a proper fix inside gold some time soon
-#__strip --strip-unneeded %buildroot%_bindir/*
+%files cli
+%{_mandir}/man1/avidemux.1*
+%{_bindir}/avidemux3_cli
+%{_libdir}/libADM_UI_Cli6.so
+%{_libdir}/libADM_render6_cli.so
 
-find build -name file.list |xargs sed -i -e 's,^\.,,'
-# Don't own standard dirs
-find build -name dirs.list |xargs sed -i -e '/.\/usr\/bin$/d;/.\/usr\/share$/d;/.\/usr\/%_lib$/d;/.\/usr$/d;/.\/usr\/include$/d'
-# Mark directories as such
-find build -name dirs.list |xargs sed -i -e 's,^\.,%%dir ,'
-find build -name dirs.list |while read r; do
-	cat $r >>`dirname $r`/file.list
-done
+%files qt
+%{_bindir}/avidemux3_qt5
+%{_bindir}/avidemux3_jobs_qt5
+%{_libdir}/libADM_UIQT56.so
+%{_libdir}/libADM_render6_QT5.so
+%{_libdir}/libADM_openGLQT56.so
+%dir %{_datadir}/avidemux6
+%dir %{_datadir}/avidemux6/qt5
+%{_datadir}/metainfo/org.avidemux.Avidemux.appdata.xml
+%{_iconsdir}/hicolor/128x128/apps/org.avidemux.Avidemux.png
+%{_datadir}/applications/org.avidemux.Avidemux.desktop
 
-%files -f %{name}.lang -f build/avidemux_core/file.list,build/SETTINGS/file.list,build/COMMON/file.list
-%_datadir/icons/*.png
-%_datadir/icons/*/*
+%files plugins
+%dir %{_libdir}/ADM_plugins6
+%dir %{_libdir}/ADM_plugins6/*
+%{_libdir}/ADM_plugins6/*/*
+%exclude %{_libdir}/ADM_plugins6/videoFilters/cli/*.so
+%exclude %{_libdir}/ADM_plugins6/videoFilters/qt5/*.so
 
-%files qt -f build/avidemux/qt4/file.list,build/QT4/file.list
-%{_datadir}/applications/avidemux-qt.desktop
+%files cli-plugins
+%{_libdir}/ADM_plugins6/videoFilters/cli/*.so
 
-%files cli -f build/avidemux/cli/file.list,build/CLI/file.list
+%files qt-plugins
+%dir %{_datadir}/avidemux6/qt5/i18n
+%{_datadir}/avidemux6/qt5/i18n/*.qm
+%{_libdir}/ADM_plugins6/videoFilters/qt5/*.so
