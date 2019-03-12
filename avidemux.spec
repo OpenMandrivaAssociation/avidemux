@@ -1,7 +1,7 @@
 %define libname		%mklibname %{name}
 %define filename %{name}_%{version}
-%define _disable_ld_no_undefined 1
-%define _disable_lto 1
+#define _disable_ld_no_undefined 1
+#define _disable_lto 1
 
 #define ffmpeg_version 2.7.7
 
