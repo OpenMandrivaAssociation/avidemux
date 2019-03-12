@@ -111,7 +111,6 @@ Recommends:	%{name}-cli-plugins
 %description	cli
 This package contains the command-line interface for %{name}.
 
-%if %{build_qt}
 %package	qt
 Summary:	Qt5 graphical user interface for %{name}
 %rename		%{name}
@@ -120,7 +119,6 @@ Recommends:	%{name}-qt-plugins
 
 %description	qt
 This package contains the Qt5 graphical user interface for %{name}.
-%endif
 
 %package	plugins
 Summary:	Plugins for %{name}
