@@ -56,10 +56,12 @@ BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(mad)
 BuildRequires:	pkgconfig(samplerate)
-BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
+BuildRequires: pkgconfig(libass)
+BuildRequires: pkgconfig(libvpx)
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
@@ -70,6 +72,7 @@ BuildRequires:	libxvid-devel
 BuildRequires:	pkgconfig(opencore-amrnb)
 BuildRequires:	pkgconfig(opencore-amrwb)
 BuildRequires:	pkgconfig(x264)
+BuildRequires: pkgconfig(x265)
 %endif
 BuildRequires:	pkgconfig(glu)
 Requires:	avidemux-ui
