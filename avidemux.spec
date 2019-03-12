@@ -202,7 +202,7 @@ StartupNotify=true
 Categories=AudioVideo;Video;AudioVideoEditing;Qt;
 EOF
 
-%find_lang %{name} || touch %name.lang
+#find_lang %{name} || touch %name.lang
 
 # Workaround for identical build IDs in nonidentical files
 # FIXME this should really get a proper fix inside gold some time soon
