@@ -217,7 +217,7 @@ find build -name dirs.list |while read r; do
 	cat $r >>`dirname $r`/file.list
 done
 
-%files -f %{name}.lang -f build/avidemux_core/file.list,build/SETTINGS/file.list,build/COMMON/file.list
+%files
 %_datadir/icons/*.png
 %_datadir/icons/*/*
 
