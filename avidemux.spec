@@ -41,7 +41,7 @@ BuildRequires:	xsltproc
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
-BuildRequires: liblame-devel
+BuildRequires: lame-devel
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5OpenGL)
