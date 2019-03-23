@@ -79,7 +79,7 @@ BuildRequires:	pkgconfig(x264)
 BuildRequires: pkgconfig(x265)
 %endif
 BuildRequires:	pkgconfig(glu)
-Requires:	avidemux-ui
+Requires:	avidemux-qt
 
 %description
 Avidemux is a free video editor designed for simple cutting,
