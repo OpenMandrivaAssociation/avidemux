@@ -48,7 +48,7 @@ BuildRequires:  pkgconfig(Qt5OpenGL)
 BuildRequires:  pkgconfig(Qt5Script)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  qmake5
-5BuildRequires:  qt5-linguist-tools
+BuildRequires:  qt5-linguist-tools
 BuildRequires:  qt5-qttools
 BuildRequires:	%{_lib}qt5gui5-vnc
 BuildRequires:	pkgconfig(jack)
