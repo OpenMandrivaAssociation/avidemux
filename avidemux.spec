@@ -27,7 +27,7 @@ Url:		http://fixounet.free.fr/avidemux
 Source0:	http://www.fosshub.com/Avidemux.html/avidemux_%{version}.tar.gz
 #Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
-Patch1:		avidemux-2.6.12-compile.patch
+#Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
