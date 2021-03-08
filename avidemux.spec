@@ -19,7 +19,7 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.7.6
+Version:	2.7.8
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
@@ -27,7 +27,7 @@ Url:		http://fixounet.free.fr/avidemux
 Source0:	http://www.fosshub.com/Avidemux.html/avidemux_%{version}.tar.gz
 #Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
-Patch1:		avidemux-2.6.12-compile.patch
+#Patch1:		avidemux-2.6.12-compile.patch
 Patch2:		avidemux-2.5.1-opencore-check.patch
 Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
@@ -57,12 +57,14 @@ BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(mad)
 BuildRequires:	pkgconfig(samplerate)
+BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires: pkgconfig(libass)
 BuildRequires: pkgconfig(vpx)
+BuildRequires: pkgconfig(vdpau)
 BuildRequires: pkgconfig(twolame)
 BuildRequires: pkgconfig(opus)	
 BuildRequires: pkgconfig(ffnvcodec)
