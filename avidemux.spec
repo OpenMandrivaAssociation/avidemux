@@ -48,7 +48,7 @@ BuildRequires:  pkgconfig(Qt5OpenGL)
 BuildRequires:  pkgconfig(Qt5Script)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  qmake5
-BuildRequires:  qt5-linguist-tools
+5BuildRequires:  qt5-linguist-tools
 BuildRequires:  qt5-qttools
 BuildRequires:	%{_lib}qt5gui5-vnc
 BuildRequires:	pkgconfig(jack)
@@ -67,7 +67,9 @@ BuildRequires: pkgconfig(vpx)
 BuildRequires: pkgconfig(vdpau)
 BuildRequires: pkgconfig(twolame)
 BuildRequires: pkgconfig(opus)	
+%ifnarch %{armx} %{arm}
 BuildRequires: pkgconfig(ffnvcodec)
+%endif
 # not packaged yet:
 #BuildRequires:  libaften-devel
 %if %with plf
