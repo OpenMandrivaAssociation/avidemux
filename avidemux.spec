@@ -19,7 +19,7 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.7.8
+Version:	2.8.0
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
@@ -52,6 +52,7 @@ BuildRequires:  qt5-linguist-tools
 BuildRequires:  qt5-qttools
 BuildRequires:	%{_lib}qt5gui5-vnc
 BuildRequires:	pkgconfig(jack)
+BuildRequires: pkgconfig(aom)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -63,6 +64,7 @@ BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires: pkgconfig(libass)
+BuildRequires: pkgconfig(vapoursynth)
 BuildRequires: pkgconfig(vpx)
 BuildRequires: pkgconfig(vdpau)
 BuildRequires: pkgconfig(twolame)
