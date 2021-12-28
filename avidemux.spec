@@ -212,6 +212,8 @@ rm -rf %{buildroot}%{_datadir}/ADM6_addons
 %files qt
 %{_bindir}/avidemux3_qt5
 %{_bindir}/avidemux3_jobs_qt5
+%{_bindir}/vsProxy
+%{_bindir}/vsProxy_gui_qt5
 %{_libdir}/libADM_UIQT56.so
 %{_libdir}/libADM_render6_QT5.so
 %{_libdir}/libADM_openGLQT56.so
