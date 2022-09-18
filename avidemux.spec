@@ -19,12 +19,12 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.8.0
+Version:	2.8.1
 Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		http://fixounet.free.fr/avidemux
-Source0:	http://www.fosshub.com/Avidemux.html/avidemux_%{version}.tar.gz
+Source0:	https://jztkft.dl.sourceforge.net/project/avidemux/avidemux/%{version}/avidemux_%{version}.tar.gz
 #Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 #Patch1:		avidemux-2.6.12-compile.patch
@@ -33,6 +33,7 @@ Patch3:		avidemux-jack-underlinking.patch
 Patch4:		avidemux-fix-cmake.patch
 #Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
 #Patch6:		avidemux-2.7.0-c++.patch
+Patch7:		avidemux-2.8.1-compile.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
@@ -157,7 +158,7 @@ covered by software patents.
 %endif
 
 %prep
-%setup -qn %{filename}
+%autosetup -p1 -n %{filename}
 
 dos2unix avidemux/common/ADM_render/CMakeLists.txt
 
@@ -165,12 +166,8 @@ dos2unix avidemux/common/ADM_render/CMakeLists.txt
 #rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
 #cp %{SOURCE1} avidemux_core/ffmpeg_package/
 
-%autopatch -p1
-
 
 %build
-
-
 %setup_compile_flags
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 export CXXFLAGS="%{optflags} -fno-strict-aliasing"

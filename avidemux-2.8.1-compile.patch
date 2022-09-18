@@ -1,0 +1,14 @@
+diff -up avidemux_2.8.1/avidemux_core/ADM_coreImage/src/ADM_colorspace.cpp.omv~ avidemux_2.8.1/avidemux_core/ADM_coreImage/src/ADM_colorspace.cpp
+--- avidemux_2.8.1/avidemux_core/ADM_coreImage/src/ADM_colorspace.cpp.omv~	2022-09-18 18:00:46.458565378 +0200
++++ avidemux_2.8.1/avidemux_core/ADM_coreImage/src/ADM_colorspace.cpp	2022-09-18 18:01:31.622456709 +0200
+@@ -637,8 +637,8 @@ void * ADMRGB32Scaler::planeWorker(void
+     }
+     
+     // resize plane
+-    int xs[4]={ADM_IMAGE_ALIGN(arg->srcWidth),0,0,0};
+-    int xd[4]={ADM_IMAGE_ALIGN(arg->dstWidth),0,0,0};
++    int xs[4]={static_cast<int>(ADM_IMAGE_ALIGN(arg->srcWidth)),0,0,0};
++    int xd[4]={static_cast<int>(ADM_IMAGE_ALIGN(arg->dstWidth)),0,0,0};
+     uint8_t *src[4]={NULL,NULL,NULL,NULL};
+     uint8_t *dst[4]={NULL,NULL,NULL,NULL};
+     src[0]=arg->iPlane;
