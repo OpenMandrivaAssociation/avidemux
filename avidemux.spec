@@ -20,10 +20,10 @@
 Summary:	A free video editor
 Name:		avidemux
 Version:	2.8.1
-Release:	2%{?extrarelsuffix}
+Release:	3%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
-Url:		http://fixounet.free.fr/avidemux
+Url:		https://fixounet.free.fr/avidemux
 Source0:	https://jztkft.dl.sourceforge.net/project/avidemux/avidemux/%{version}/avidemux_%{version}.tar.gz
 #Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
 Source100:	%{name}.rpmlintrc
@@ -40,6 +40,7 @@ BuildRequires:	imagemagick
 BuildRequires:	nasm
 BuildRequires:	xsltproc
 BuildRequires:	yasm
+BuildRequires: which
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
 BuildRequires: lame-devel
