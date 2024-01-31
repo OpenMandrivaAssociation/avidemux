@@ -34,6 +34,7 @@ Patch4:		avidemux-fix-cmake.patch
 #Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
 #Patch6:		avidemux-2.7.0-c++.patch
 Patch7:		avidemux-2.8.1-compile.patch
+Patch8:        https://github.com/mean00/avidemux2/commit/5b637ae04773b417c9e6b47ba015abf458a9c151.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
