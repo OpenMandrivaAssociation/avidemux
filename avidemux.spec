@@ -20,7 +20,7 @@
 Summary:	A free video editor
 Name:		avidemux
 Version:	2.8.1
-Release:	3%{?extrarelsuffix}
+Release:	4%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
 Url:		https://fixounet.free.fr/avidemux
