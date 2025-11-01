@@ -44,6 +44,7 @@ BuildRequires:	a52dec-devel
 BuildRequires: lame-devel
 BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(Qt6Network)
 BuildRequires:  pkgconfig(Qt6OpenGL)
 BuildRequires:  pkgconfig(Qt6OpenGLWidgets)
 BuildRequires:  pkgconfig(Qt6Widgets)
