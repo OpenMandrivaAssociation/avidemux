@@ -172,7 +172,7 @@ bash bootStrap.bash \
      --with-plugins \
      --with-system-liba52 \
      --with-system-libmad \
-     --with-ninja
+     --with-ninja || cat /tmp/logCmakebuildQt6
 
 %install
 cp -a install/* %{buildroot}
