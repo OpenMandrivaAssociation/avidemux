@@ -1,7 +1,8 @@
 %define libname		%mklibname %{name}
-%define filename %{name}_%{version}
+%define filename %{name}%{!?git:_%{version}}%{?git:2-master}
 %define _disable_ld_no_undefined 1
-%define _disable_lto 1
+#define _disable_lto 1
+%define git 20251101
 
 #define ffmpeg_version 2.7.7
 
@@ -19,22 +20,18 @@
 
 Summary:	A free video editor
 Name:		avidemux
-Version:	2.8.1
-Release:	4%{?extrarelsuffix}
+Version:	2.8.2%{?git:~%{git}}
+Release:	1%{?extrarelsuffix}
 License:	GPLv2+
 Group:		Video
-Url:		https://fixounet.free.fr/avidemux
+Url:		https://avidemux.sourceforge.net/
+%if 0%{?git:1}
+Source0:	https://github.com/mean00/avidemux2/archive/refs/heads/master.tar.gz#/%{name}-%{git}.tar.gz
+%else
 Source0:	https://jztkft.dl.sourceforge.net/project/avidemux/avidemux/%{version}/avidemux_%{version}.tar.gz
-#Source1:	ffmpeg-%{ffmpeg_version}.tar.bz2
+%endif
 Source100:	%{name}.rpmlintrc
-#Patch1:		avidemux-2.6.12-compile.patch
-Patch2:		avidemux-2.5.1-opencore-check.patch
-Patch3:		avidemux-jack-underlinking.patch
-Patch4:		avidemux-fix-cmake.patch
-#Patch5:		avidemux-2.6.8-ffmpeg-1.2.12.patch
-#Patch6:		avidemux-2.7.0-c++.patch
-Patch7:		avidemux-2.8.1-compile.patch
-Patch8:        https://github.com/mean00/avidemux2/commit/5b637ae04773b417c9e6b47ba015abf458a9c151.patch
+Patch7:		avidemux-compile.patch
 BuildRequires:	cmake
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
@@ -45,15 +42,12 @@ BuildRequires: which
 BuildRequires:	gettext-devel
 BuildRequires:	a52dec-devel
 BuildRequires: lame-devel
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5OpenGL)
-BuildRequires:  pkgconfig(Qt5Script)
-BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  qmake5
-BuildRequires:  qt5-linguist-tools
-BuildRequires:  qt5-qttools
-BuildRequires:	%{_lib}qt5gui5-vnc
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(Qt6OpenGL)
+BuildRequires:  pkgconfig(Qt6OpenGLWidgets)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  qmake-qt6
 BuildRequires:	pkgconfig(jack)
 BuildRequires: pkgconfig(aom)
 BuildRequires:	pkgconfig(libpulse)
@@ -69,7 +63,6 @@ BuildRequires:	pkgconfig(sqlite3)
 BuildRequires: pkgconfig(libass)
 BuildRequires: pkgconfig(vapoursynth)
 BuildRequires: pkgconfig(vpx)
-BuildRequires: pkgconfig(vdpau)
 BuildRequires: pkgconfig(twolame)
 BuildRequires: pkgconfig(opus)	
 %ifnarch %{armx} %{arm}
@@ -111,7 +104,6 @@ Shared libraries for %{name}.
 %package	devel
 Summary:	Header files for %{name}
 Requires:	%{libname} = %{version}
-Requires:	pkgconfig(vdpau)
 Obsoletes:	%{name}-qt-devel < %{version}-%{release}
 Obsoletes:	%{name}-cli-devel < %{version}-%{release}
 
@@ -128,13 +120,13 @@ Recommends:	%{name}-cli-plugins
 This package contains the command-line interface for %{name}.
 
 %package	qt
-Summary:	Qt5 graphical user interface for %{name}
+Summary:	Qt graphical user interface for %{name}
 %rename		%{name}
 Recommends:	%{name}-plugins
 Recommends:	%{name}-qt-plugins
 
 %description	qt
-This package contains the Qt5 graphical user interface for %{name}.
+This package contains the Qt graphical user interface for %{name}.
 
 %package	plugins
 Summary:	Plugins for %{name}
@@ -162,8 +154,6 @@ covered by software patents.
 %prep
 %autosetup -p1 -n %{filename}
 
-dos2unix avidemux/common/ADM_render/CMakeLists.txt
-
 #sed -i 's/set(FFMPEG_VERSION "2.7.6")/set(FFMPEG_VERSION "%{ffmpeg_version}")/' cmake/admFFmpegBuild.cmake
 #rm -f avidemux_core/ffmpeg_package/ffmpeg-*.tar.bz2
 #cp %{SOURCE1} avidemux_core/ffmpeg_package/
@@ -180,9 +170,9 @@ bash bootStrap.bash \
      --with-core \
      --with-cli \
      --with-plugins \
-     --with-system-libass \
      --with-system-liba52 \
-     --with-system-libmad
+     --with-system-libmad \
+     --with-ninja
 
 %install
 cp -a install/* %{buildroot}
@@ -209,15 +199,13 @@ rm -rf %{buildroot}%{_datadir}/ADM6_addons
 %{_libdir}/libADM_render6_cli.so
 
 %files qt
-%{_bindir}/avidemux3_qt5
-%{_bindir}/avidemux3_jobs_qt5
+%{_bindir}/avidemux3_qt6
+%{_bindir}/avidemux3_jobs_qt6
 %{_bindir}/vsProxy
-%{_bindir}/vsProxy_gui_qt5
-%{_libdir}/libADM_UIQT56.so
-%{_libdir}/libADM_render6_QT5.so
-%{_libdir}/libADM_openGLQT56.so
-%dir %{_datadir}/avidemux6
-%dir %{_datadir}/avidemux6/qt5
+%{_bindir}/vsProxy_gui_qt6
+%{_libdir}/libADM_render6_QT6.so
+%{_libdir}/libADM_UIQT66.so
+%{_libdir}/libADM_openGLQT66.so
 %{_datadir}/metainfo/org.avidemux.Avidemux.appdata.xml
 %{_iconsdir}/hicolor/128x128/apps/org.avidemux.Avidemux.png
 %{_datadir}/applications/org.avidemux.Avidemux.desktop
@@ -227,12 +215,10 @@ rm -rf %{buildroot}%{_datadir}/ADM6_addons
 %dir %{_libdir}/ADM_plugins6/*
 %{_libdir}/ADM_plugins6/*/*
 %exclude %{_libdir}/ADM_plugins6/videoFilters/cli/*.so
-%exclude %{_libdir}/ADM_plugins6/videoFilters/qt5/*.so
+%exclude %{_libdir}/ADM_plugins6/videoFilters/qt6/*.so
 
 %files cli-plugins
 %{_libdir}/ADM_plugins6/videoFilters/cli/*.so
 
 %files qt-plugins
-%dir %{_datadir}/avidemux6/qt5/i18n
-%{_datadir}/avidemux6/qt5/i18n/*.qm
-%{_libdir}/ADM_plugins6/videoFilters/qt5/*.so
+%{_libdir}/ADM_plugins6/videoFilters/qt6/*.so
