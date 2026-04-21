@@ -33,6 +33,7 @@ Source0:	https://jztkft.dl.sourceforge.net/project/avidemux/avidemux/%{version}/
 Source100:	%{name}.rpmlintrc
 Patch7:		avidemux-compile.patch
 BuildRequires:	cmake
+BuildRequires: ninja
 BuildRequires:	dos2unix
 BuildRequires:	imagemagick
 BuildRequires:	nasm
